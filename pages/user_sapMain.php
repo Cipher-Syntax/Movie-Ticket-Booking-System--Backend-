@@ -168,7 +168,7 @@
     <script src="../assets/js/user_sapMain.js"></script>
     <script>
         document.getElementById('notif-bell').addEventListener('click', () => {
-            window.location.href = "/pages/transaction_history.php";
+            window.location.href = "../pages/transaction_history.php";
         })
 
         function confirmDelete() {

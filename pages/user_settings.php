@@ -138,11 +138,11 @@
     <script src="../assets/js/user_settings.js"></script>
     <script>
         document.getElementById('notif-bell').addEventListener('click', () => {
-            window.location.href = "/pages/transaction_history.php";
+            window.location.href = "../pages/transaction_history.php";
         })
 
         document.getElementById('faq').addEventListener('click', () => {
-            window.location.href = "/pages/faq.php";
+            window.location.href = "../pages/faq.php";
         })
     </script>
 </body>

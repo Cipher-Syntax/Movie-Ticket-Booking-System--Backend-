@@ -239,7 +239,7 @@
         }
         
         document.getElementById('notif-bell').addEventListener('click', () => {
-            window.location.href = "/pages/transaction_history.php";
+            window.location.href = "../pages/transaction_history.php";
         })
     </script>
 </body>
