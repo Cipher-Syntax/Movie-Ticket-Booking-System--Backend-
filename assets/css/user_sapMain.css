@@ -1,0 +1,485 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playwrite+SK:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html{
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+}
+*{
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: Poppins;
+    background-color: #190F53;
+    color: #fff;
+    margin: 0;
+}
+header{
+    background: linear-gradient(180deg, rgb(0, 0, 0), rgb(64, 37, 145));
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.logo{
+    padding-left: 25px;
+}
+.search-box{
+    display: flex;
+}
+.user-information{
+    display: grid;
+    grid-template-columns: 0px 50px;
+    width: fit-content;
+    padding-right: 50px;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.user-information i{
+    font-size: 23px;
+}
+.notif-bell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.notif-value{
+    color: #B6116B;
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    left: 20px;
+    bottom: 10px;
+}
+.user-pic{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 30px;
+    object-fit: cover;
+    object-position: center;
+}
+.sub-menu-wrapper{
+    width: 280px;
+    overflow: hidden;
+    transition: height 0.5s;
+    height: 0;
+    position: absolute;
+    right: 2%;
+    color: #190F53;
+    z-index: 100;
+}
+.sub-menu-wrapper.js-open-menu{
+    height: 400px;
+    position: absolute;
+}
+.sub-menu{
+    background: white;
+    padding: 10px;
+    margin-top: 1px;
+    border-radius: 5px;
+    height: 100%;
+}
+#logout{
+    position: absolute;
+    bottom: 0;
+}
+#logout::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 70px;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background-color: #B6116B
+}
+.user-info{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.user-info img{
+    height: 60px;
+    width: 60px;
+
+}
+.sub-menu hr{
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+}
+.sub-menu-links{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 20px 0;
+}
+.sub-menu-links a{
+    display: grid;
+    grid-template-columns: 10px 100px 30px;
+}
+.sub-menu-links p{
+    width: 100%;
+    font-size: 14px;
+}
+.sub-menu-links i{
+    font-size: 30px;
+    max-width: fit-content;
+    margin-right: 20px;
+}
+.sub-menu-links span{
+    font-size: 22px;
+    transition: transform 0.5s;
+    position: relative;
+    left: 70px;
+}
+.sub-menu-links:hover span{
+    transform: translateX(5px);
+}
+.sub-menu-links:hover p{
+    font-weight: 600;
+}
+.sidebar-navigation{
+    width: 300px;
+    height: 600px;
+    color: white;
+    background-color: #190F53;
+    box-shadow: 0px 12px 20px 0px rgba(0, 0, 0, 0.50);
+    border: 2px solid white;
+    border-top: none;
+    border-left: none;
+    border-bottom: none;
+}
+.sidebar-navigation h5{
+    padding-left: 100px;
+    text-align: left;
+}
+.dashboard-field,
+.movies-field,
+.bookings-field,
+.cinema-field,
+.settings-field
+{
+    display: flex;
+    height: 36px;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px;
+    font-size: 20px;
+    position: relative;
+    right: 40px;
+}
+.dashboard-field i, 
+.movies-field i,
+.bookings-field i,
+.cinema-field i,
+.settings-field i
+{
+    max-width: fit-content;
+    position: relative;
+    left: 70px;
+}
+.dashboard-field a,
+.movies-field a,
+.bookings-field a,
+.cinema-field a,
+.settings-field a
+{
+    text-decoration: none;
+    color: #fff;
+}
+.dashboard-field:hover, 
+.movies-field:hover,
+.bookings-field:hover,
+.cinema-field:hover,
+.settings-field:hover
+{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.settings-privacy-container{
+    display: flex;
+}
+
+/*.settings, .delete, .logout {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    background-color: #4a3470;
+    color: white;
+    border-radius: 8px;
+    width: 500px;
+}*/
+
+/*.settings {
+    margin: 20px;
+    text-align: center;
+}
+
+#settings {
+    background: #4a3470;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    /*cursor: pointer;
+    transition: 0.3s;
+}
+
+#settings:hover {
+    background: #5d43b4;
+    transform: scale(1.02);
+}
+
+.deleteAccount {
+    margin: 20px;
+    text-align: center;
+}
+
+#deleteAccount {
+    background: #4a3470;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#deleteAccount:hover {
+    background: #5d43b4;
+    transform: scale(1.02);
+}
+
+.logout-button {
+    margin: 20px;
+    text-align: center;
+}
+
+#logout-button {
+    background: #4a3470;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#logout-button:hover {
+    background: #5d43b4;
+    transform: scale(1.02);
+}*/
+form{
+    width: fit-content;
+    position: relative;
+    left: 20%;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 140px); 
+    margin-top: 50px; 
+    max-width: fit-content;
+}
+
+/*button {
+    margin-top: 20vw;
+    height: 50px;
+    width: 500px;
+    max-width: 100%; 
+    margin: 15px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #4a3470;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+}
+
+button:hover {
+    background: #5d43b4;
+    transform: scale(1.02);
+}*/
+button {
+    height: 80px;
+    width: 500px;
+    max-width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #4a3470;
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    margin: 10px 0;
+    cursor: pointer;
+}
+button p{
+    position: relative;
+    right: 90px;
+}
+
+button:hover {
+    background: #5d43b4;
+    transform: scale(1.05);
+}
+
+
+button i {
+    font-size: 18px;
+}
+
+footer{
+    font-family: Poppins;
+    width: 100%;
+    background: linear-gradient(180deg, rgb(0, 0, 0), rgb(64, 37, 145));
+    height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 23%;
+}
+.footer-logo{
+    max-width: 33%;
+    width: fit-content;
+    margin-left: 30px;
+
+}
+.contact-info{
+    max-width: 33%;
+    width: fit-content;
+    margin-left: 5%;
+}
+.categories{
+    max-width: 33%;
+    width: fit-content;
+    margin-right: 3%;
+}
+.footer-logo h1{
+    padding-left: 15px;
+}
+.contact-info a, .categories a{
+    color: white;
+    font-size: 12px;
+    text-decoration: none;
+}
+@media screen and (max-width: 1024px){
+    .main-container{
+        display: flex;
+        flex-direction: column;
+    }
+    .sidebar-navigation{
+        height: 250px;
+        width: 100%;
+        background-color: #d1c1e3;
+    }
+    .sidebar-navigation h5{
+        text-align: center;
+    }
+    .dashboard-field,
+    .movies-field,
+    .bookings-field,
+    .cinema-field,
+    .settings-field
+    {
+        padding-top: 50px;
+    }
+    .dashboard-field i,
+    .movies-field i,
+    .bookings-field i,
+    .cinema-field i,
+    .settings-field i{
+        left: 450px;
+    }
+    .settings-privacy-container{
+        display: flex;
+        flex-direction: column;
+    }
+    .container{
+        left: 30%;
+    }
+    footer{
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        margin-top: 50px;
+    }
+    .footer-logo{
+        margin-top: 20px;
+    }
+    .categories{
+        margin-left: 50px;
+        margin-bottom: 20px;
+    }
+}
+@media screen and (max-width: 720px){
+    .sidebar-navigation{
+        height: 250px;
+        width: 100%;
+        background-color: #d1c1e3;
+    }
+    .sidebar-navigation h5{
+        text-align: center;
+        color: #fff;
+    }
+    .dashboard-field,
+    .movies-field,
+    .bookings-field,
+    .cinema-field,
+    .settings-field
+    {
+        padding-top: 50px;
+    }
+    .dashboard-field i,
+    .movies-field i,
+    .bookings-field i,
+    .cinema-field i,
+    .settings-field i{
+        left: 180px;
+    }
+    .container{
+        left: 30px;
+    }
+    footer{
+        position: absolute;
+        top: 160%;
+    }
+    .footer-logo{
+        margin-left: -30px;
+    }
+    .categories{
+        display: inline;
+        max-width: fit-content;
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }
+}

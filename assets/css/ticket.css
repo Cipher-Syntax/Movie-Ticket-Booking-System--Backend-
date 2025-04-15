@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playwrite+SK:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html{
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+}
+*{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #190F53;
+    color: white;
+    font-family: Poppins;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+header{
+    background: linear-gradient(180deg, rgb(0, 0, 0), rgb(64, 37, 145));
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.logo{
+    padding-left: 25px;
+}
+.search-box{
+    display: flex;
+}
+.user-information{
+    display: grid;
+    grid-template-columns: 0px 50px;
+    width: fit-content;
+    padding-right: 50px;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.user-information i{
+    font-size: 23px;
+}
+.notif-bell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.notif-value{
+    color: #B6116B;
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    left: 20px;
+    bottom: 10px;
+}
+.user-pic{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 30px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.sub-menu-wrapper{
+    width: 280px;
+    overflow: hidden;
+    transition: height 0.5s;
+    height: 0;
+    position: absolute;
+    right: 2%;
+    color: #190F53;
+    z-index: 100;
+}
+.sub-menu-wrapper.js-open-menu{
+    height: 400px;
+    position: absolute;
+}
+.sub-menu{
+    background: white;
+    padding: 10px;
+    margin-top: 1px;
+    border-radius: 5px;
+    height: 100%;
+}
+#logout{
+    position: absolute;
+    bottom: 0;
+}
+#logout::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 70px;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background-color: #B6116B
+}
+
+.user-info{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.user-info img{
+    height: 60px;
+    width: 60px;
+
+}
+.sub-menu hr{
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+}
+.sub-menu-links{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 20px 0;
+}
+.sub-menu-links a{
+    display: grid;
+    grid-template-columns: 10px 100px 30px;
+}
+.sub-menu-links p{
+    width: 100%;
+    font-size: 14px;
+}
+.sub-menu-links i{
+    font-size: 30px;
+    max-width: fit-content;
+    margin-right: 20px;
+}
+.sub-menu-links span{
+    font-size: 22px;
+    transition: transform 0.5s;
+    position: relative;
+    left: 70px;
+}
+.sub-menu-links:hover span{
+    transform: translateX(5px);
+}
+.sub-menu-links:hover p{
+    font-weight: 600;
+}
+.text{
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 15px;
+}
+.ticket{
+    padding-left: 500px;
+    max-width: fit-content;
+}
+ .ticket-container {
+    position: relative;
+    width: 300px;
+    height: 650px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 50px;
+}
+.ticket-header {
+    color: rgb(0, 0, 0);
+    /* padding: 15px; */
+    position: relative;
+}
+
+.ticket-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+.ticket-image img{
+    width: 300px;
+    height: 440px;
+    object-fit: cover;
+}
+.ticket-cutout {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: #190F53;
+    border-radius: 50%;
+}
+
+.ticket-cutout.top {
+    right: -30px;
+    position: absolute;
+    top: 410px;
+}
+
+.ticket-cutout.bottom {
+    left: -30px;
+    position: absolute;
+    top: 410px;
+}
+        
+.ticket-details{
+    padding-top: 20px;
+    padding-left: 30px;
+    position: relative;
+}
+.side-side{
+    display: flex;
+}
+.info-label {
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+.info-value {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+.ticket-qrCode {
+    margin-top: 10px;
+    position: relative;
+}
+#qr-code{
+    position: absolute;
+    right: 45px;
+    width: 50px;
+    height: 50px;
+}
+#ticket-btn{
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 300px;
+    background-color: #B6116B;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-style: normal;
+    position: relative;
+    margin-left: 500px;
+    margin-bottom: 20px;
+}
+    
+footer{
+    position: absolute;
+    left: 0px;
+    font-family: Poppins;
+    width: 100%;
+    background: linear-gradient(180deg, rgb(0, 0, 0), rgb(64, 37, 145));
+    height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 23%;
+}
+.footer-logo{
+    max-width: 33%;
+    width: fit-content;
+    margin-left: 30px;
+
+}
+.contact-info{
+    max-width: 33%;
+    width: fit-content;
+    margin-left: 5%;
+}
+.categories{
+    max-width: 33%;
+    width: fit-content;
+    margin-right: 3%;
+}
+.footer-logo h1{
+    padding-left: 15px;
+}
+.contact-info a, .categories a{
+    color: white;
+    font-size: 12px;
+    text-decoration: none;
+}
+.ticket-price{
+    position: absolute;
+    color: #190F53;
+    margin-top: 10px;
+}
+@media screen and (max-width: 1024px){
+    .ticket{
+        padding-left: 300px;
+    }
+    #ticket-btn{
+        margin-left: 300px;
+    }
+    footer{
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+    .footer-logo{
+        margin-top: 20px;
+    }
+    .categories{
+        margin-left: 50px;
+        margin-bottom: 20px;
+    }
+}
+@media screen and (max-width: 720px){
+    .ticket{
+        padding-left: 50px;
+    }
+    #ticket-btn{
+        margin-left: 50px;
+    }
+    footer{
+        margin-top: 50px;
+    }
+    .footer-logo{
+        margin-left: -30px;
+    }
+    .categories{
+        display: inline;
+        max-width: fit-content;
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }
+}

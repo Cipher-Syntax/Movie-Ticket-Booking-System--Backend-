@@ -1,0 +1,438 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playwrite+SK:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html{
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+}
+*{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #190F53;
+    color: white;
+    font-family: Poppins;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+header{
+    font-family: Poppins;
+    width: 100%;
+    background: linear-gradient(180deg, rgb(0, 0, 0), rgb(64, 37, 145));
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+.logo{
+    padding-left: 25px;
+}
+.user-information{
+    display: grid;
+    grid-template-columns: 0px 50px;
+    width: fit-content;
+    padding-right: 50px;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.user-information i{
+    font-size: 23px;
+}
+.notif-bell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.notif-value{
+    color: #B6116B;
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    left: 20px;
+    bottom: 10px;
+}
+.user-pic{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 30px;
+    object-fit: cover;
+    object-position: center;
+}
+.sub-menu-wrapper{
+    width: 280px;
+    overflow: hidden;
+    transition: height 0.5s;
+    height: 0;
+    position: absolute;
+    right: 2%;
+    color: #190F53;
+    z-index: 100;
+}
+.sub-menu-wrapper.js-open-menu{
+    height: 400px;
+    position: absolute;
+}
+.sub-menu{
+    background: white;
+    padding: 10px;
+    margin-top: 1px;
+    border-radius: 5px;
+    height: 100%;
+}
+#logout{
+    position: absolute;
+    bottom: 0;
+}
+#logout::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 70px;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background-color: #B6116B
+}
+
+.user-info{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.user-info img{
+    height: 60px;
+    width: 60px;
+
+}
+.sub-menu hr{
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+}
+.sub-menu-links{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 20px 0;
+}
+.sub-menu-links a{
+    display: grid;
+    grid-template-columns: 10px 100px 30px;
+}
+.sub-menu-links p{
+    width: 100%;
+    font-size: 14px;
+}
+.sub-menu-links i{
+    font-size: 30px;
+    max-width: fit-content;
+    margin-right: 20px;
+}
+.sub-menu-links span{
+    font-size: 22px;
+    transition: transform 0.5s;
+    position: relative;
+    left: 70px;
+}
+.sub-menu-links:hover span{
+    transform: translateX(5px);
+}
+.logo h1{
+    padding-left: 25px;
+}
+.text{
+    text-align: center;
+    font-size: 44px;
+    font-weight: bold;
+    margin-top: 100px;
+    padding: 0;
+    text-shadow: 0 8px 12px rgba(255, 255, 255, 0.5);
+}
+#entrance{
+    padding-left: 70px;
+    width: fit-content;
+    position: absolute;
+    padding-top: 100px;
+    font-size: 20px;
+}
+#cinema-screen{
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+.seat-selection{
+    padding-top: 80px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+.left-seat{
+    padding: 50px;
+    display: grid;
+    grid-template-columns: auto repeat(10, 1fr);
+    gap: 10px;
+    text-align: center;
+    /* float: left; */
+    margin-left: 15vw;
+}
+.right-seat{
+    padding: 50px;
+    display: grid;
+    grid-template-columns: auto repeat(10, 1fr);
+    gap: 10px;
+    text-align: center;
+    /* float: right; */
+}
+.seat {
+    width: 27px;
+    height: 19px;
+    cursor: pointer;
+}
+
+.row-label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+.seat-legend{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 95px;
+    margin-top: 10vh;
+    margin-bottom: 20vh;
+    margin-left: 30vw;
+    width: fit-content;
+}
+.seat-legend p{
+    text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+    font-style: normal;
+}
+.seat-item{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+#fire-exit{
+    margin-left: 1228px;
+    width: fit-content;
+    margin-top: 0;
+    padding-top: 0;
+    font-size: 20px;
+}
+#ticket-btn{
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 300px;
+    background-color: #B6116B;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-style: normal;
+    position: relative;
+    left: 70vw;
+    margin-top: 20px;
+}
+footer{
+    margin-top: 50px;
+    font-family: Poppins;
+    width: 100%;
+    background: linear-gradient(180deg, rgb(0, 0, 0), rgb(64, 37, 145));
+    height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 23%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+}
+.footer-logo{
+    max-width: 33%;
+    width: fit-content;
+    margin-left: 30px;
+
+}
+.contact-info{
+    max-width: 33%;
+    width: fit-content;
+    margin-left: 5%;
+}
+.categories{
+    max-width: 33%;
+    width: fit-content;
+    margin-right: 3%;
+}
+.footer-logo h1{
+    padding-left: 15px;
+}
+.contact-info a, .categories a{
+    color: white;
+    font-size: 12px;
+    text-decoration: none;
+}
+.booking-confirmation{
+    height: 300px;
+    width: 500px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: absolute;
+    left: 32%;
+    top: 35%;
+    display: none;
+    z-index: 100;
+}
+
+.text-confirmation{
+    font-size: 30px;
+    font-weight: bold;
+    position: relative;
+    top: 30px;
+}
+.text-confirmation::after{
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 150px;
+    height: 2px;
+    transform: translateX(-50%);
+    background-color: #B6116B;
+}
+.confirmation-btn{
+    display: flex;
+    position: relative;
+    top: 175px;
+}
+.confirmation-btn a{
+    font-size: 20px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+.confirmation-btn a:hover{
+    text-decoration: underline;
+    color: #B6116B;
+}
+.text-confirmation-note{
+    position: relative;
+    top: 50px;
+}
+
+@media screen and (max-width: 1024px){
+    .curve-line{
+        width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .seat-selection{
+        position: relative;
+        right: 8%;
+    }
+    .seat-legend{
+        margin-left: 20vw;
+    }
+    #fire-exit{
+        margin-left: 850px;
+    }
+    #ticket-btn{
+        left: 60vw;
+    }
+    footer{
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+    .footer-logo{
+        margin-top: 20px;
+    }
+    .categories{
+        margin-left: 50px;
+        margin-bottom: 20px;
+    }
+    .booking-confirmation{
+        left: 25%;
+    }
+}
+@media screen and (max-width: 720px){
+    .curve-line{
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #entrance{
+        padding-left: 30px;
+    }
+    .seat-selection{
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+    .left-seat{
+        gap: 15px;
+        max-width: fit-content;
+        margin-left: 50px;
+        padding: 20px;
+    }
+    .right-seat{
+        gap: 15px;
+        max-width: fit-content;
+        margin-left: 57px;
+        padding: 20px;
+    }
+    .seat{
+        width: 25px;
+        height: 17px;
+    }
+    .seat-legend{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-left: 5vw;
+    }
+    #fire-exit{
+        margin-left: 380px;
+    }
+    #ticket-btn{
+        left: 80px;
+    }
+    footer{
+        position: relative;
+        top: 20px;
+    }
+    .footer-logo{
+        margin-left: -30px;
+    }
+    .categories{
+        display: inline;
+        max-width: fit-content;
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }
+    .booking-confirmation{
+        left: 4%;
+        width: 450px;
+    }
+
+}
