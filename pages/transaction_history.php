@@ -75,7 +75,7 @@
                 <!-- <span> > </span> -->
             </a>
 
-            <a href="logout.php" class="sub-menu-links logout" id="logout">
+            <a href="../pages/logout.php" class="sub-menu-links logout" id="logout">
                 <i class='bx bx-log-out'></i>
                 <p>Logout</p>
                 <!-- <span> > </span> -->

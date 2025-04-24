@@ -120,7 +120,7 @@
             <div class="container">
                 <div class="settingsAndPrivacy">
                     <div class="settings">
-                        <button type="button" id="settings" onclick="location.href='/pages/user_settings.php'">
+                        <button type="button" id="settings" onclick="location.href='../pages/user_settings.php'">
                             <i class="fa fa-cog"></i> 
                             <p>Settings</p>
                         </button>
@@ -138,7 +138,7 @@
 
                 <div class="logout">
                     <div class="logout-button">
-                        <button type="button" id="logout-button" onclick="location.href='/pages/logout.php'">
+                        <button type="button" id="logout-button" onclick="location.href='../pages/logout.php'">
                             <i class="fa fa-sign-out-alt"></i> 
                             <p>Logout</p>
                         </button>
