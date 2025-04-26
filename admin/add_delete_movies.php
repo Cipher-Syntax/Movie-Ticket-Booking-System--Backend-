@@ -195,11 +195,11 @@
                 <i class='bx bxs-camera-movie'></i>
                 <a href="../admin/admin_cinema.php">Cinema</a>
             </div>
-            <!-- Settings -->
+            <!-- Settings
             <div class="settings-field">
                 <i class='bx bxs-cog'></i>
                 <h5>Settings</h5>
-            </div>
+            </div> -->
         </nav>
 
         <div class="add-new-movies-btn">
