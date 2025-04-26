@@ -3,6 +3,8 @@
 
     include("../includes/connection.php");
     include("../includes/allFunction.php");
+    
+    
 ?>
 
 <!DOCTYPE html>
@@ -34,24 +36,25 @@
     
     <main>
         <div class="image-slider">
+            
             <div class="mySlides fade">
-                <img src="../assets/images/cinemas/cinema_1.png" alt="Cinema 1">
+                <img src="../assets/images/cinemas/cinema1.png" alt="Cinema 1">
             </div>
             
             <div class="mySlides fade">
-                <img src="../assets/images/cinemas/cinema_2.png" alt="Cinema 2">
+                <img src="../assets/images/cinemas/cinema2.png" alt="Cinema 2">
             </div>
             
             <div class="mySlides fade">
-                <img src="../assets/images/cinemas/cinema_3.jpg" alt="Cinema 3">
+                <img src="../assets/images/cinemas/cinema3.png" alt="Cinema 3">
             </div>
             
             <div class="mySlides fade">
-                <img src="../assets/images/cinemas/cinema_4.jpg" alt="Cinema 4">
+                <img src="../assets/images/cinemas/cinema4.png" alt="Cinema 4">
             </div>
             
             <div class="mySlides fade">
-                <img src="../assets/images/cinemas/cinema_5.jpg" alt="Cinema 5">
+                <img src="../assets/images/cinemas/cinema5.png" alt="Cinema 5">
             </div>
         </div>
         <div class="catchphrase">
