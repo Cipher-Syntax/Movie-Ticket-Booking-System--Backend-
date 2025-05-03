@@ -12,6 +12,15 @@
       $userEmail = trim(filter_var($_POST['email_container'], FILTER_SANITIZE_EMAIL));
       $password = trim($_POST['password_container']);
 
+      $usernameQuery = $conn->prepare("SELECT COUNT(id) as total_users FROM users");
+      $usernameQuery->execute();
+      $result = $usernameQuery->get_result();
+      $usernameResult = $result->fetch_assoc();
+      $userCounter = $usernameResult['total_users'] + 1;
+
+      $username = "mbts" . str_pad($userCounter, 3, "0", STR_PAD_LEFT);
+
+
       if (!empty($first_name) && !empty($last_name) && !empty($userEmail) && !empty($password)) {
          $userPassword = password_hash($password, PASSWORD_BCRYPT);
 
@@ -28,9 +37,9 @@
                   $stmt->close();
 
                   // Insert new user into the database
-                  $insertIntoTableStmt = $conn->prepare("INSERT INTO users (first_name, last_name, user_email, user_password) VALUES (?, ?, ?, ?)");
+                  $insertIntoTableStmt = $conn->prepare("INSERT INTO users (username, first_name, last_name, user_email, user_password) VALUES (?, ?, ?, ?, ?)");
                   if ($insertIntoTableStmt) {
-                     $insertIntoTableStmt->bind_param("ssss", $first_name, $last_name, $userEmail, $userPassword);
+                     $insertIntoTableStmt->bind_param("sssss", $username, $first_name, $last_name, $userEmail, $userPassword);
                      if ($insertIntoTableStmt->execute()) {
                            header("Location: login.php");
                            exit;
