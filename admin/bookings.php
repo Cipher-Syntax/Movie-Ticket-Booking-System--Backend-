@@ -1,15 +1,13 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include_once("../includes/connection.php");
-    include_once("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/Movies.php");
 
-    $admin_data = admin_login($conn);
-
-    $query = "SELECT * FROM bookings";
-    $result = mysqli_query($conn, $query);
-
-    $bookings_result = mysqli_num_rows($result) > 0;
+    $admin_data = checkAdminLogin($conn);
 
 ?>
 
@@ -101,22 +99,23 @@
                 </thead>
                 <tbody>
                     <?php
-                        if ($bookings_result) {
-                            while ($bookings = mysqli_fetch_assoc($result)) {
+                        $bookings = $admin->getAllBookings();
+
+                        if (!empty($bookings)) {
+                            foreach ($bookings as $booking) {
                                 echo "<tr>";
-                                echo "<td>" . $bookings['id'] . "</td>";
-                                echo "<td>" . $bookings['movie_id'] . "</td>";
-                                echo "<td>" . $bookings['user_id'] . "</td>";
-                                echo "<td>" . $bookings['cinema_table'] . "</td>";
-                                echo "<td>" . $bookings['seats'] . "</td>";
-                                echo "<td>" . $bookings['price_per_ticket'] . "</td>";
-                                echo "<td>" . $bookings['tickets'] . "</td>";
-                                echo "<td>" . $bookings['total_price'] . "</td>";
-                                echo "<td>" . date("M d - D", strtotime($bookings['booking_date'])) . "</td>";
+                                echo "<td>" . $booking['id'] . "</td>";
+                                echo "<td>" . $booking['movie_id'] . "</td>";
+                                echo "<td>" . $booking['user_id'] . "</td>";
+                                echo "<td>" . $booking['cinema_table'] . "</td>";
+                                echo "<td>" . $booking['seats'] . "</td>";
+                                echo "<td>" . $booking['price_per_ticket'] . "</td>";
+                                echo "<td>" . $booking['tickets'] . "</td>";
+                                echo "<td>" . $booking['total_price'] . "</td>";
+                                echo "<td>" . date("M d - D", strtotime($booking['booking_date'])) . "</td>";
                                 echo "</tr>";
                             }
-                        } 
-                        else {
+                        } else {
                             echo "<tr><td colspan='9' style='text-align:center;'>No bookings found</td></tr>";
                         }
                     ?>

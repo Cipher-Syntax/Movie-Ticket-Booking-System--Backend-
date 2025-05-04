@@ -1,24 +1,26 @@
-<?php
-    session_start();
+<?php  
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
 
-    // Check admin login if needed
-    $admin_data = admin_login($conn);
-
+    $admin_data = checkAdminLogin($conn);
 
     function fetchComingSoonMovies($conn) {
         $movies = array();
         
         for ($i = 1; $i <= 5; $i++) {
             $table = "cinema" . $i;
-            $query = "SELECT id, title, image, '$table' as cinema_table FROM movies WHERE status = 'Coming Soon'";
-            $result = mysqli_query($conn, $query);
-            
+            $query = $conn->prepare("SELECT id, title, image, '$table' as cinema_table FROM movies WHERE status = 'Coming Soon'");
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC); 
+
             if ($result) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $movies[] = $row;
+                foreach ($result as $row) {
+                    $movies[] = $row; 
                 }
             }
         }
@@ -31,107 +33,82 @@
         
         for ($i = 1; $i <= 5; $i++) {
             $table = "cinema" . $i;
-            $query = "SELECT id, title, image, status, '$table' as cinema_table FROM movies WHERE status = 'Now Showing' OR status = 'Popular Movies'";
-            $result = mysqli_query($conn, $query);
+            $query = $conn->prepare("SELECT id, title, image, status, '$table' as cinema_table FROM movies WHERE status = 'Now Showing' OR status = 'Popular Movies'");
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
             
             if ($result) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $movies[] = $row;
+                foreach ($result as $row) {
+                    $movies[] = $row; 
                 }
             }
         }
         
         return $movies;
     }
-
     if (isset($_POST['add_movie'])) {
         $movie_id = $_POST['movie_id'];
         $source_cinema = $_POST['source_cinema'];
         $target_cinema = $_POST['target_cinema'];
         $new_status = $_POST['new_status'];
-        
 
-        $query = "SELECT * FROM $source_cinema WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $movie_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $movie_data = $result->fetch_assoc();
-        $stmt->close();
-        
+        $query = $conn->prepare("SELECT * FROM $source_cinema WHERE id = ?");
+        $query->execute([$movie_id]);
+        $movie_data = $query->fetch(PDO::FETCH_ASSOC);
+
         if ($movie_data) {
             if ($source_cinema == $target_cinema) {
-                $update_query = "UPDATE $source_cinema SET status = ? WHERE id = ?";
-                $stmt = $conn->prepare($update_query);
-                $stmt->bind_param("si", $new_status, $movie_id);
-                $stmt->execute();
-                $stmt->close();
-            } 
-            else {
-                $check_query = "SELECT id FROM $target_cinema WHERE title = ?";
-                $stmt = $conn->prepare($check_query);
-                $stmt->bind_param("s", $movie_data['title']);
-                $stmt->execute();
-                $check_result = $stmt->get_result();
+                $update_query = $conn->prepare("UPDATE $source_cinema SET status = ? WHERE id = ?");
+                $update_query->execute([$new_status, $movie_id]);
+            } else {
+                $check_query = $conn->prepare("SELECT id FROM $target_cinema WHERE title = ?");
+                $check_query->execute([$movie_data['title']]);
+                $check_result = $check_query->fetch(PDO::FETCH_ASSOC);
                 
-                if ($check_result->num_rows == 0) {
-                    // Insert into target cinema with new status
-                    $insert_query = "INSERT INTO $target_cinema (title, image, description, trailer, status, genre, director, cast, rating, duration, release_date) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    $stmt = $conn->prepare($insert_query);
-                    $stmt->bind_param(
-                        "sssssssssss", 
-                        $movie_data['title'], 
-                        $movie_data['image'], 
-                        $movie_data['description'], 
-                        $movie_data['trailer'], 
-                        $new_status, 
-                        $movie_data['genre'], 
-                        $movie_data['director'], 
-                        $movie_data['cast'], 
-                        $movie_data['rating'], 
-                        $movie_data['duration'], 
+                if (!$check_result) {
+                    $insert_query = $conn->prepare("INSERT INTO $target_cinema (title, image, description, trailer, status, genre, director, cast, rating, duration, release_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    $insert_query->execute([
+                        $movie_data['title'],
+                        $movie_data['image'],
+                        $movie_data['description'],
+                        $movie_data['trailer'],
+                        $new_status,
+                        $movie_data['genre'],
+                        $movie_data['director'],
+                        $movie_data['cast'],
+                        $movie_data['rating'],
+                        $movie_data['duration'],
                         $movie_data['release_date']
-                    );
-                    $stmt->execute();
-                    $stmt->close();
+                    ]);
                 } else {
-                    // Update existing movie in target cinema
-                    $existing_id = $check_result->fetch_assoc()['id'];
-                    $update_query = "UPDATE $target_cinema SET status = ? WHERE id = ?";
-                    $stmt = $conn->prepare($update_query);
-                    $stmt->bind_param("si", $new_status, $existing_id);
-                    $stmt->execute();
-                    $stmt->close();
+                    $existing_id = $check_result['id'];
+                    $update_query = $conn->prepare("UPDATE $target_cinema SET status = ? WHERE id = ?");
+                    $update_query->execute([$new_status, $existing_id]);
                 }
             }
             
-            // Redirect to avoid form resubmission
+
             header("Location: add_delete_movies.php?success=1");
             exit();
         }
     }
 
-    // Process delete movie action
     if (isset($_POST['delete_movie'])) {
         $movie_id = $_POST['movie_id'];
         $cinema_table = $_POST['cinema_table'];
         
-        $delete_query = "DELETE FROM $cinema_table WHERE id = ?";
-        $stmt = $conn->prepare($delete_query);
-        $stmt->bind_param("i", $movie_id);
-        $stmt->execute();
-        $stmt->close();
+        // Delete movie from the specified cinema table
+        $delete_query = $conn->prepare("DELETE FROM $cinema_table WHERE id = ?");
+        $delete_query->execute([$movie_id]);
         
-        // Redirect to avoid form resubmission
         header("Location: add_delete_movies.php?deleted=1");
         exit();
     }
 
-    // Fetch movies for add and delete sections
     $comingSoonMovies = fetchComingSoonMovies($conn);
     $currentMovies = fetchCurrentMovies($conn);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
