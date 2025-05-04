@@ -131,3 +131,137 @@ body{
     width: 120px;
     float: right;
 }
+.password-field{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.password-field i{
+   position: absolute;
+   width: fit-content;
+   right: 10px;
+   top: 10px;
+   cursor: pointer;
+}
+
+
+@media (max-width: 991px){
+    .container{
+        display: grid;
+        width: 100%;
+        margin-left: 0vw;
+        margin-top: 0vh;
+        border-radius: 0;
+        box-shadow: 0px 0px 0px 0px;
+        border: none;
+    }
+    .left-side{
+        width: 100%;
+        border-radius: 0;
+    }
+    .left-logo{
+        padding: 10px;
+        max-width: 500px;
+        margin-left: 15%;
+        margin-top: 0px;
+    }
+    #left-noir{
+        margin: 20%;
+        font-size: 40px;
+        color: white;
+        max-width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 0;
+    }
+    #left-paragraph{
+        font-size: 15px;
+        margin-bottom: 20%;
+    }
+    .right-side{
+        width: 100%;
+        max-width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+    .right-side input{
+        width: 90%;
+    }
+    .right-side button{
+        width: 250px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .admin_access{
+        max-width: fit-content;
+        padding-bottom: 15px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 720px){
+    .container{
+        display: grid;
+        width: 100%;
+        margin-left: 0vw;
+        margin-top: 0vh;
+        border-radius: 0;
+        box-shadow: 0px 0px 0px 0px;
+        border: none;
+    }
+    .left-side{
+        width: 100%;
+        border-radius: 0;
+    }
+    .left-logo{
+        max-width: 350px;
+        margin-top: 0px;
+    }
+    #left-noir{
+        margin: 20%;
+        font-size: 40px;
+        color: white;
+        max-width: fit-content;
+        margin-left: auto;
+        margin-left: 50px;
+        margin-bottom: 0;
+    }
+    #left-paragraph{
+        font-size: 12px;
+    }
+    .right-side{
+        width: 100%;
+        max-width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+    .right-side input{
+        width: 85%;
+        margin-left: 15px;
+    }
+    .right-side button{
+        width: 250px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .admin_access{
+        max-width: fit-content;
+        font-size: 15px;
+    }
+    .password-field{
+        position: relative;
+        right: 20px;
+    }
+    .firstname{
+        width: 160px;
+    }
+    .lastname{
+        position: relative;
+        width: 160px;
+        right: 40px;
+    }
+
+}
