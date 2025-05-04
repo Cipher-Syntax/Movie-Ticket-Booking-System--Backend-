@@ -88,18 +88,6 @@
         <div class="logo">
             <h1>NoirÉclipse</h1>
         </div>
-
-        <form action="#" class="search-box">
-            <input type="text" name="search" placeholder="Search here...." class="search-input" />
-            <button type="submit">
-                <i class='bx bx-search'></i>
-            </button>
-        </form>
-
-        <div class="user-profile">
-            <i class="fa fa-bell"></i>
-            <i class="far fa-user-circle"></i>
-        </div>
     </header>
     
     <div class="dashboard">
