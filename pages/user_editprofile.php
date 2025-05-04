@@ -25,10 +25,6 @@
             else {
                 $user_profile_path = $user_data['user_profile'];
             }
-
-            $result = $user->updateUser($user_id, $username, $email, $user_profile_path);
-
-            if($result){
                 echo "<script>alert('Updated Successfully!');</script>";
                 echo "<script>window.location.href='user_editprofile.php';</script>";
 
@@ -158,7 +154,6 @@
                 
                 <div class="profile-info">
                     <div class="info-box">
-                        <input type="text" name="username" id="username" class="name-input" value="<?php echo $user_data['username']; ?>">
                         <span class="label" id="username-label" >Username</span>
                     </div>
                     <div class="info-box">

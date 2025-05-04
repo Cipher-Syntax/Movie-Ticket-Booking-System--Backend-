@@ -15,8 +15,6 @@
 
       $usernameQuery = $conn->prepare("SELECT COUNT(id) as total_users FROM users");
       $usernameQuery->execute();
-      $usernameResult = $usernameQuery->fetch(PDO::FETCH_ASSOC);
-      $userCounter = $usernameResult['total_users'] + 1;
 
       $username = "mbts" . str_pad($userCounter, 3, "0", STR_PAD_LEFT);
 
@@ -30,13 +28,6 @@
          else{
             $createAccount = $user->createAccount($username, $first_name, $last_name, $userEmail, $hashed_password);
 
-            if($createAccount){
-               header("Location: login.php");
-               exit;
-            }
-            else{
-               echo "<script>alert('Something went wrong. Please try again!');</script>";
-            }
          }
       } else {
          echo "<script>alert('Please fill in all required fields!');</script>";
