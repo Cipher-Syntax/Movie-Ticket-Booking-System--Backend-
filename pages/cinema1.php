@@ -1,11 +1,13 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
 
-
-    $user_data = check_login($conn);
+    $user_data = checkUserLogin($conn);
 
     $allowedCinemas = ['cinema1', 'cinema2', 'cinema3', 'cinema4', 'cinema5'];
     if (isset($_GET['cinema']) && in_array($_GET['cinema'], $allowedCinemas)) {
@@ -23,27 +25,34 @@
 
     $cinemaTable = $_SESSION['cinema_table'];
 
-    // SEARCH MOVIES
     $searchTerm = "";
+    $searchCondition = "";
+    $bind_params = [];
+    
     if (isset($_GET['search']) && !empty($_GET['search'])) {
-        $searchTerm = mysqli_real_escape_string($conn, $_GET['search']);
+        $searchTerm = $_GET['search'];
+        $searchCondition = " AND title LIKE :search";
+        $bind_params = [':search' => "%$searchTerm%"];
     }
+    
+    $queries = [
+        'nowShowing' => "SELECT * FROM movies WHERE status = 'Now Showing' AND cinema_number = 1 $searchCondition",
+        'popular' => "SELECT * FROM movies WHERE status = 'Popular Movies' AND cinema_number = 1 $searchCondition",
+        'comingSoon' => "SELECT * FROM movies WHERE status = 'Coming Soon' AND cinema_number = 1 $searchCondition"
+    ];
+    
+    $nowShowingStmt = $conn->prepare($queries['nowShowing']);
+    $popularStmt = $conn->prepare($queries['popular']);
+    $comingSoonStmt = $conn->prepare($queries['comingSoon']);
+    
+    $nowShowingStmt->execute($bind_params);
+    $popularStmt->execute($bind_params);
+    $comingSoonStmt->execute($bind_params);
 
-    if (!empty($searchTerm)) {
-        $searchCondition = " AND title LIKE '%$searchTerm%'";
-    } 
-    else {
-        $searchCondition = "";
-    }
+    $nowShowingResult = $nowShowingStmt->fetchAll(PDO::FETCH_ASSOC);
+    $popularResult = $popularStmt->fetchAll(PDO::FETCH_ASSOC);
+    $comingSoonResult = $comingSoonStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch movies
-    $nowShowingQuery = "SELECT * FROM movies WHERE status = 'Now Showing' AND cinema_number = 1 $searchCondition";
-    $popularQuery = "SELECT * FROM movies WHERE status = 'Popular Movies' AND cinema_number = 1 $searchCondition";
-    $comingSoonQuery = "SELECT * FROM movies WHERE status = 'Coming Soon' AND cinema_number = 1 $searchCondition";
-
-    $nowShowingResult = mysqli_query($conn, $nowShowingQuery);
-    $popularResult = mysqli_query($conn, $popularQuery);
-    $comingSoonResult = mysqli_query($conn, $comingSoonQuery);
 ?>
 
 <!DOCTYPE html>
@@ -135,13 +144,13 @@
     <?php endif; ?>
 
     <center>
-        <div class="movies-showing" id="js-now-showing" <?php echo (mysqli_num_rows($nowShowingResult) == 0) ? 'style="display:none;"' : ''; ?>>
+        <div class="movies-showing" id="js-now-showing" <?php echo (count($nowShowingResult) === 0) ? 'style="display:none;"' : ''; ?>>
             <div class="movie-labels">
                 <h3 class="movie-label">Now Showing</h3>
             </div>
             <div class="horizontal-scrolling js-now-showing-scroll">
                 <div class="movie-container js-movie-grid">
-                    <?php while ($movie = mysqli_fetch_assoc($nowShowingResult)) { ?>
+                    <?php foreach ($nowShowingResult as $movie): ?>
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
@@ -153,7 +162,7 @@
                                 </a>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php endforeach ?>
                 </div>
             </div>
             <div class="scroll-btn-container">
@@ -163,15 +172,16 @@
         </div>
     </center>
 
+
     <!-- Popular Movies Section -->
     <center>
-        <div class="movies-showing" id="js-popular-movies" <?php echo (mysqli_num_rows($popularResult) == 0) ? 'style="display:none;"' : ''; ?>>
+        <div class="movies-showing" id="js-popular-movies" <?php echo (COUNT($popularResult) === 0) ? 'style="display:none;"' : ''; ?>>
             <div class="movie-labels">
                 <h3 class="movie-label">Popular Movies</h3>
             </div>
             <div class="horizontal-scrolling js-popular-movies-scroll">
                 <div class="movie-container js-popular-movie-grid">
-                    <?php while ($movie = mysqli_fetch_assoc($popularResult)) { ?>
+                    <?php foreach ($popularResult as $movie): ?>
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
@@ -183,7 +193,7 @@
                                 </a>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php endforeach ?>
                 </div>
             </div>
             <div class="scroll-btn-container">
@@ -195,23 +205,25 @@
 
     <!-- Coming Soon Section -->
     <center>
-        <div class="movies-showing" id="js-coming-soon" <?php echo (mysqli_num_rows($comingSoonResult) == 0) ? 'style="display:none;"' : ''; ?>>
+        <div class="movies-showing" id="js-coming-soon" <?php echo (COUNT($comingSoonResult) === 0) ? 'style="display:none;"' : ''; ?>>
             <div class="movie-labels">
                 <h3 class="movie-label">Coming Soon</h3>
             </div>
             <div class="horizontal-scrolling js-coming-soon-scroll">
                 <div class="movie-container js-coming-soon-movie-grid">
-                    <?php while ($movie = mysqli_fetch_assoc($comingSoonResult)) { ?>
+                    <?php foreach ($comingSoonResult as $movie): ?>
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
                                     <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" />
                                 </div>
                                 <h3 class="movie-title"><?php echo hideExceedingTitle($movie['title']); ?></h3>
-
+                                <a href="movie_details.php?id=<?php echo $movie['id']; ?>&cinema=<?php echo $cinemaTable; ?>">
+                                    <input type="button" value="Book Now" class="js-book-now-link" data-get-title="<?php echo $movie['title']; ?>"/>
+                                </a>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php endforeach ?>
                 </div>
             </div>
             <div class="scroll-btn-container">
@@ -223,7 +235,7 @@
 
     <?php 
         // No results found
-        if (mysqli_num_rows($nowShowingResult) == 0 && mysqli_num_rows($popularResult) == 0 && mysqli_num_rows($comingSoonResult) == 0 && !empty($searchTerm)) {
+        if (COUNT($nowShowingResult) === 0 && COUNT($popularResult) === 0 && COUNT($comingSoonResult) === 0 && !empty($searchTerm)) {
             echo '<center><div class="no-results"><h2>No movies found matching "' . htmlspecialchars($searchTerm) . '"</h2></div></center>';
         }
     ?>
@@ -258,7 +270,3 @@
 
 </body>
 </html>
-
-<?php
-    $conn->close();
-?>

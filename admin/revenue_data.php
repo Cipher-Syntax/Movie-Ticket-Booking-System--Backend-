@@ -1,13 +1,14 @@
-<?php
-    include("../includes/connection.php");
+<?php  
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
 
-    $query = "SELECT DATE(booking_date) AS booking_day, SUM(total_price) AS total_revenue FROM bookings GROUP BY booking_day ORDER BY booking_day ASC";
-
-    $result = mysqli_query($conn, $query);
+    $stmt = $conn->prepare("SELECT DATE(booking_date) AS booking_day, SUM(total_price) AS total_revenue FROM bookings GROUP BY booking_day ORDER BY booking_day ASC");
+    $stmt->execute();
 
     $data = [];
 
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $data[] = [
             "day" => $row['booking_day'],
             "revenue" => $row['total_revenue']

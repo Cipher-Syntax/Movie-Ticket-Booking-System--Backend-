@@ -1,35 +1,38 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/Movies.php");
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    $admin_data = checkAdminLogin($conn);
 
-    
-    $admin_data = admin_login($conn);
+    $query = $conn->prepare("SELECT * FROM bookings ORDER BY booking_date DESC LIMIT 4");
+    $query->execute();
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    $query = "SELECT * FROM bookings LIMIT 4";
-    $result = mysqli_query($conn, $query);
-
-    // TOTAL BOOKINGS
-    $total_query = "SELECT COUNT(id) AS total_bookings FROM bookings";
-    $total_result = mysqli_query($conn, $total_query);
-    $total_value = mysqli_fetch_assoc($total_result);
-    $total_bookings = $total_value['total_bookings'];
+    // TOTAL QUERY
+    $total_query = $conn->prepare("SELECT COUNT(id) AS total_bookings FROM bookings");
+    $total_query->execute();
+    $total_result = $total_query->fetch(PDO::FETCH_ASSOC);
+    $total_bookings = $total_result['total_bookings'];
 
     // REVENUE TODAY
-    $revenue_query = "SELECT SUM(total_price) as revenue_today FROM bookings";
-    $revenue_result = mysqli_query($conn, $revenue_query);
-    $revenue_value = mysqli_fetch_assoc($revenue_result);
-    $revenue_today = $revenue_value['revenue_today'];
+    $revenue_query = $conn->prepare("SELECT SUM(total_price) as revenue_today FROM bookings WHERE DATE(booking_date) = CURDATE()");
+    $revenue_query->execute();
+    $revenue_result = $revenue_query->fetch(PDO::FETCH_ASSOC);
+    $revenue_today = $revenue_result['revenue_today'] ?? 0;
 
     // ACTIVE USERS
-    $active_query = "SELECT COUNT(user_id) AS active_users FROM bookings";
-    $active_result = mysqli_query($conn, $active_query);
-    $active_value = mysqli_fetch_assoc($active_result);
-    $active_users = $active_value['active_users'];
+    $active_query = $conn->prepare("SELECT COUNT(DISTINCT user_id) AS active_users FROM bookings");
+    $active_query->execute();
+    $active_result = $active_query->fetch(PDO::FETCH_ASSOC);
+    $active_users = $active_result['active_users'];
 
 ?>
+
 
 
 <!DOCTYPE html>
@@ -147,18 +150,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="container">
-                    <div class="Cinema Occupancy">
-                        <p>Cinema Occupancy</p>
-                    </div>
-                    <div class="values">
-                        <p>85%</p>
-                        <div class="icon-container">
-                            <i class='bx bx-line-chart' ></i>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
 
@@ -170,9 +161,6 @@
                 <p id="revenue-overview">Revenue Overview</p>
             </div>
 
-            <!-- <div class="chart-container">
-                <canvas id="revenueChart" width="100%" height="60"></canvas>
-            </div> -->
             <div class="chart-container" style="display: flex; gap: 20px; flex-wrap: wrap;">
                 <!-- Line Chart -->
                 <div style="flex: 1; min-width: 300px;">
@@ -209,24 +197,25 @@
                 </thead>
                 <tbody>
                     <?php
-                        while(!empty($bookings  = mysqli_fetch_assoc($result))){
-                            if($bookings){
+                        $bookings = $admin->getAllBookings();
+
+                        if (!empty($bookings)) {
+                            foreach ($bookings as $booking) {
                                 echo "<tr>";
-                                echo "<td>". $bookings['id'] . "</td>";
-                                echo "<td>". $bookings['movie_id'] ."</td>";
-                                echo "<td>". $bookings['user_id'] . "</td>";
-                                echo "<td>". $bookings['cinema_table'] . "</td>";
-                                echo "<td>". $bookings['seats'] . "</td>";
-                                echo "<td>". $bookings['price_per_ticket'] . "</td>";
-                                echo "<td>". $bookings['tickets'] ."</td>";
-                                echo "<td>". $bookings['total_price'] ."</td>";
-                                echo "<td>". date("M d - D" , strtotime($bookings['booking_date'])) . "</td>";
+                                echo "<td>" . $booking['id'] . "</td>";
+                                echo "<td>" . $booking['movie_id'] . "</td>";
+                                echo "<td>" . $booking['user_id'] . "</td>";
+                                echo "<td>" . $booking['cinema_table'] . "</td>";
+                                echo "<td>" . $booking['seats'] . "</td>";
+                                echo "<td>" . $booking['price_per_ticket'] . "</td>";
+                                echo "<td>" . $booking['tickets'] . "</td>";
+                                echo "<td>" . $booking['total_price'] . "</td>";
+                                echo "<td>" . date("M d - D", strtotime($booking['booking_date'])) . "</td>";
+                                echo "</tr>";
                             }
-                            else{
-                                echo "<tr><td colspan='8' style='text-align:center;'>No users found</td></tr>";
-                            }
+                        } else {
+                            echo "<tr><td colspan='9' style='text-align:center;'>No bookings found</td></tr>";
                         }
-                        
                     ?>
                 </tbody>
             </table>

@@ -1,12 +1,13 @@
 <?php
-   session_start();
+   if(session_status() == PHP_SESSION_NONE){
+      session_start();
+   }
 
-   include("../includes/connection.php");
-   include("../includes/allFunction.php");
-
+   require_once("../class/Connection.php");
+   require_once("../class/Database.php");
+   require_once("../class/UserRegistration.php");
 
    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-      // Get user input and sanitize data
       $first_name = trim(htmlspecialchars($_POST['firstname']));
       $last_name = trim(htmlspecialchars($_POST['lastname']));
       $userEmail = trim(filter_var($_POST['email_container'], FILTER_SANITIZE_EMAIL));
@@ -14,46 +15,28 @@
 
       $usernameQuery = $conn->prepare("SELECT COUNT(id) as total_users FROM users");
       $usernameQuery->execute();
-      $result = $usernameQuery->get_result();
-      $usernameResult = $result->fetch_assoc();
+      $usernameResult = $usernameQuery->fetch(PDO::FETCH_ASSOC);
       $userCounter = $usernameResult['total_users'] + 1;
 
       $username = "mbts" . str_pad($userCounter, 3, "0", STR_PAD_LEFT);
 
-
       if (!empty($first_name) && !empty($last_name) && !empty($userEmail) && !empty($password)) {
-         $userPassword = password_hash($password, PASSWORD_BCRYPT);
+         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-         $stmt = $conn->prepare("SELECT * FROM users WHERE user_email = ? LIMIT 1");
-         if ($stmt) {
-               $stmt->bind_param("s", $userEmail);
-               $stmt->execute();
-               $result = $stmt->get_result();
+         $checkEmail = $user->login($userEmail);
+         if($checkEmail){
+            echo "<script>alert('Email is already used!');</script>";
+         }
+         else{
+            $createAccount = $user->createAccount($username, $first_name, $last_name, $userEmail, $hashed_password);
 
-               if ($result && $result->num_rows > 0) {
-                  // Email already exists
-                  echo "<script>alert('Email is already used!');</script>";
-               } else {
-                  $stmt->close();
-
-                  // Insert new user into the database
-                  $insertIntoTableStmt = $conn->prepare("INSERT INTO users (username, first_name, last_name, user_email, user_password) VALUES (?, ?, ?, ?, ?)");
-                  if ($insertIntoTableStmt) {
-                     $insertIntoTableStmt->bind_param("sssss", $username, $first_name, $last_name, $userEmail, $userPassword);
-                     if ($insertIntoTableStmt->execute()) {
-                           header("Location: login.php");
-                           exit;
-                     } else {
-                           echo "<script>alert('Something went wrong. Please try again!');</script>";
-                     }
-                     $insertIntoTableStmt->close();
-                  } else {
-                     echo "<script>alert('Error preparing the insert statement.');</script>";
-                  }
-               }
-               $stmt->close();
-         } else {
-               echo "<script>alert('Error preparing the email check statement.');</script>";
+            if($createAccount){
+               header("Location: login.php");
+               exit;
+            }
+            else{
+               echo "<script>alert('Something went wrong. Please try again!');</script>";
+            }
          }
       } else {
          echo "<script>alert('Please fill in all required fields!');</script>";
@@ -72,6 +55,7 @@
 
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
    <link href="https://fonts.googleapis.com/css2?family=Playwrite+SK:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 </head>
 
    <body>
@@ -96,7 +80,11 @@
                   <input type="txt" name="lastname" placeholder="Lastname" required/>
                </div>
                <input type="email" id="email_container" name="email_container" placeholder="Enter Email"  required/>
-               <input type="password" id="password_container" name="password_container" placeholder="Password" minlength="8" required/>
+               <div class="password-field">
+                  <input type="password" id="password_container" name="password_container" placeholder="Password" minlength="8" required/>
+                  <i class="far fa-eye" id="eye" onclick="showPassword()"></i>
+                  <i class="fa fa-eye-slash" style="display: none;" id="eye-slashed" onclick="hidePassword()"></i>
+               </div>
                <center><button type="submit">Create Account</button></center>
             </form>
 
@@ -105,5 +93,28 @@
              </div>
          </div>
      </div>
+
+     <script>
+        const showPassword = document.querySelector('#eye');
+        const slashedEye = document.querySelector('#eye-slashed')
+        const password = document.querySelector('#password_container');
+
+        showPassword.addEventListener('click', () => {
+            if(password.type === "password"){
+                password.type = "text";
+                showPassword.style.display = "none";
+                slashedEye.style.display = "block";
+
+            }
+        });
+
+        slashedEye.addEventListener('click', () => {
+            if(password.type === "text"){
+                password.type = "password";
+                slashedEye.style.display = "none";
+                showPassword.style.display = "block";
+            }
+        })
+    </script>
    </body>
 </html>

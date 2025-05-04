@@ -1,10 +1,14 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
+    require_once("../class/Movies.php");
 
-    $user_data = check_login($conn);
+    $user_data = checkUserLogin($conn);
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($_POST['movie_id']) && !empty($_POST['cinema_table']) && !empty($_POST['selected_date']) && !empty($_POST['selected_time'])) {
@@ -18,23 +22,20 @@
         }
     }
 
-    // If session variables are missing redirect to cinema selection page
     if (!isset($_SESSION['movie_id']) || !isset($_SESSION['cinema_table']) || !isset($_SESSION['selected_date']) || !isset($_SESSION['selected_time'])) {
         header("Location: cinema_selection_page.php");
         exit();
     }
 
-
     $reservedSeats = array();
-    // $query = "SELECT seats FROM bookings";
+
     $cinemaTable = $_SESSION['cinema_table'];
     $movie_id = $_SESSION['movie_id'];
-
-    $query = "SELECT seats FROM bookings WHERE cinema_table = '$cinemaTable' AND id = '$movie_id'";
     
-    $result = mysqli_query($conn, $query);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $seatsBooked = explode(',', $row['seats']);
+    $query = $user->bookings($cinemaTable, $movie_id);
+
+    while ($result = $query->fetch(PDO::FETCH_ASSOC)) {
+        $seatsBooked = explode(',', $result['seats']);
         foreach ($seatsBooked as $seatBook) {
             $seatBook = trim($seatBook);
             if (!empty($seatBook)) {
@@ -42,6 +43,7 @@
             }
         }
     }
+    
 
 ?>
 

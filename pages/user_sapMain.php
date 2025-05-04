@@ -1,11 +1,13 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
 
-
-    $user_data = check_login($conn);
+    $user_data = checkUserLogin($conn);
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
         if(isset($_POST['delete'])){
@@ -14,13 +16,13 @@
             $query = "DELETE FROM users WHERE id = '$user_id' ";
             $stmt = $conn->prepare($query);
             $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
-            if ($stmt->affected_rows > 0) {
+            if ($result) {
                 echo "<script>alert('Succesfully deleted the account');</script>";
             } else {
                 echo "<script>alert('Failed to delete!');</script>";
             }
-
         }
     }
 ?>

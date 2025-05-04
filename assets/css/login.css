@@ -130,6 +130,19 @@ body{
     text-decoration: none;
     color: gold;
 }
+.password-field{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.password-field i{
+   position: absolute;
+   width: fit-content;
+   right: 10px;
+   top: 10px;
+   cursor: pointer;
+}
 
 @media (max-width: 991px){
     .container{
@@ -235,6 +248,10 @@ body{
     .admin_access{
         max-width: fit-content;
         font-size: 15px;
+    }
+    .password-field{
+        position: relative;
+        right: 20px;
     }
 
 }

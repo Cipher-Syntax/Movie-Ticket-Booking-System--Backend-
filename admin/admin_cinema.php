@@ -1,23 +1,27 @@
 <?php
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
 
-    $admin_data = admin_login($conn);
+    $admin_data = checkAdminLogin($conn);
 
     $cinemas = [];
 
-    $query = "SELECT * FROM cinemas";
-    $result = mysqli_query($conn, $query);
+    $query = $conn->prepare("SELECT * FROM cinemas");
+    $query->execute();
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    while ($row = mysqli_fetch_assoc($result)) {
+    foreach ($result as $row) {
         $cinemaId = "cinema" . $row['id'];
         $cinemas[$cinemaId] = [
             "name" => $row['cinema_name'],
             "location" => $row['location']
         ];
     }
-
 
 ?>
 
@@ -103,13 +107,14 @@
                 <tbody>
                     <?php
                         foreach ($cinemas as $cinemaId => $cinema) {
-                            $query = "SELECT seats FROM bookings WHERE cinema_table = '$cinemaId'";
-                            $result = mysqli_query($conn, $query);
+                            $query = $conn->prepare("SELECT seats FROM bookings WHERE cinema_table = '$cinemaId'");
+                            $query->execute();
+                            $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
                             $totalSeats = 0;
 
                             // Count all seats
-                            while ($row = mysqli_fetch_assoc($result)) {
+                            foreach ($result as $row) {
                                 $seatList = array_filter(explode(',', $row['seats']));
                                 $totalSeats += count($seatList);
                             }

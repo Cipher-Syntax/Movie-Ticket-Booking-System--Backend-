@@ -1,42 +1,34 @@
 <?php
-   session_start();
+    if(session_status() == PHP_SESSION_NONE){
+      session_start();
+  }
 
-   include("../includes/connection.php");
-   include("../includes/allFunction.php");
-
+  require_once("../class/Connection.php");
+  require_once("../includes/login_checker.php");
+  require_once("../class/UserRegistration.php");
 
    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-      // Get admin input and trim white spaces
       $adminEmail = trim($_POST['email_container']);
       $adminPassword = trim($_POST["admin_password_container"]);
 
-      if (!empty($adminEmail) && !empty($adminPassword)) {
-         $stmt = $conn->prepare("SELECT * FROM admin WHERE admin_email = ? LIMIT 1");
-         if ($stmt) {
-               $stmt->bind_param("s", $adminEmail);
-               $stmt->execute();
-               $result = $stmt->get_result();
+      if (!empty($adminEmail) && !empty($adminPassword)){
+         $loginResult = $admin->adminLogin($adminEmail, $adminPassword);
 
-               if ($result && $result->num_rows > 0) {
-                  $admin_data = $result->fetch_assoc();
+         if($loginResult){
+             if(password_verify($adminPassword, $loginResult['admin_password'])){
+                 $_SESSION['email_container'] = $loginResult['admin_email'];
+                 $_SESSION['id'] = $loginResult['id'];
 
-                  if (password_verify($adminPassword, $admin_data['admin_password'])) {
-                     // Set session variables for the admin
-                     $_SESSION['email_container'] = $admin_data['admin_email'];
-                     $_SESSION['id'] = $admin_data['id'];
+                 header("Location: admin_dashboard.php");
+                 exit();
+             }
+             else{
+                 include_once("../pages/user_error_message.php");
+             }
 
-                     // Redirect to admin dashboard page
-                     header("Location: admin_dashboard.php");
-                     exit;
-                  } else {
-                     echo "<script>alert('Invalid email or password!');</script>";
-                  }
-               } else {
-                  echo "<script>alert('Invalid email or password!');</script>";
-               }
-               $stmt->close();
-         } else {
-               echo "<script>alert('An error occurred. Please try again!');</script>";
+         }
+         else{
+             echo "<script>alert('Email not found!');</script>";
          }
       } else {
          echo "<script>alert('Please fill in all required fields!');</script>";
