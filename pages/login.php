@@ -1,43 +1,36 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
-
+    require_once("../class/Connection.php");
+    require_once("../class/Database.php");
+    require_once("../class/UserRegistration.php");
+    require_once("../includes/login_checker.php");
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $userEmail = trim($_POST['email_container']);
         $userPassword = trim($_POST['password_container']);
 
         if (!empty($userEmail) && !empty($userPassword)) {
-            $stmt = $conn->prepare("SELECT * FROM users WHERE user_email = ? LIMIT 1");
-            if ($stmt) {
-                $stmt->bind_param("s", $userEmail);
-                $stmt->execute();
-                $result = $stmt->get_result();
+            $loginResult = $user->login($userEmail, $userPassword);
 
-                if ($result && $result->num_rows > 0) {
-                    $user_data = $result->fetch_assoc();
+            if($loginResult){
+                if(password_verify($userPassword, $loginResult['user_password'])){
+                    $_SESSION['email_container'] = $loginResult['user_email'];
+                    $_SESSION['id'] = $loginResult['id'];
 
-                    if (password_verify($userPassword, $user_data['user_password'])) {
-                        $_SESSION['email_container'] = $user_data['user_email'];
-                        $_SESSION['id'] = $user_data['id'];
-
-                        // Redirect to cinema selection page
-                        header("Location: cinema_selection_page.php");
-                        exit();
-                    } 
-                    else {
-                        include("user_error_message.php");
-                    }
-                } 
-                else {
-                    echo "<script>alert('Email not found!');</script>";
+                    // Redirect to cinema selection page
+                    header("Location: cinema_selection_page.php");
+                    exit();
                 }
-                $stmt->close();
-            } 
-            else {
-                echo "<script>alert('Something went wrong');</script>";
+                else{
+                    include_once("user_error_message.php");
+                }
+
+            }
+            else{
+                echo "<script>alert('Email not found!');</script>";
             }
         } 
         else {
@@ -55,6 +48,7 @@
     <title>Log In</title>
     <link rel="stylesheet" href="../assets/css/login.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 
 </head>
 
@@ -74,7 +68,11 @@
             <h2>Log In</h2>
             <form method="POST">
                <input type="email" id="email_container" name="email_container" placeholder="Enter Email" required />
-               <input type="password" id="password_container" name="password_container" placeholder="Password" minlength="8" required />
+               <div class="password-field">
+                    <input type="password" id="password_container" name="password_container" placeholder="Password" minlength="8" required />
+                    <i class="far fa-eye" id="eye" onclick="showPassword()"></i>
+                    <i class="fa fa-eye-slash" style="display: none;" id="eye-slashed" onclick="hidePassword()"></i>
+               </div>
                <center><button type="submit">Log In</button></center>
             </form>
 
@@ -88,6 +86,29 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const showPassword = document.querySelector('#eye');
+        const slashedEye = document.querySelector('#eye-slashed')
+        const password = document.querySelector('#password_container');
+
+        showPassword.addEventListener('click', () => {
+            if(password.type === "password"){
+                password.type = "text";
+                showPassword.style.display = "none";
+                slashedEye.style.display = "block";
+
+            }
+        });
+
+        slashedEye.addEventListener('click', () => {
+            if(password.type === "text"){
+                password.type = "password";
+                slashedEye.style.display = "none";
+                showPassword.style.display = "block";
+            }
+        })
+    </script>
 </body>
 </html>
 

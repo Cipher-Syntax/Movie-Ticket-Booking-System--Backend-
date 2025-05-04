@@ -1,11 +1,13 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
 
-
-    $user_data = check_login($conn);
+    $user_data = checkUserLogin($conn);
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +48,7 @@
         <div class="sub-menu">
             <div class="user-info">
                 <img src="<?php echo $user_data['user_profile']; ?>" class="user-pic">
-                <?php echo $user_data['first_name']; ?>
+                <?php echo $user_data['username']; ?>
             </div>
             <hr>
 

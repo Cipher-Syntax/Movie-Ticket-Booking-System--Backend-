@@ -1,11 +1,13 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
 
-
-    $user_data = check_login($conn);
+    $user_data = checkUserLogin($conn);
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (isset($_POST['save'])) {
@@ -23,17 +25,15 @@
             else {
                 $user_profile_path = $user_data['user_profile'];
             }
-    
-            $query = "UPDATE users SET first_name = ?, user_email = ?, user_profile = ? WHERE id = '$user_id'";
-            $stmt = $conn->prepare($query);
-    
-            $stmt->bind_param("sss", $username, $email, $user_profile_path);
-            $stmt->execute();
-    
-            if ($stmt->affected_rows > 0) {
+
+            $result = $user->updateUser($user_id, $username, $email, $user_profile_path);
+
+            if($result){
                 echo "<script>alert('Updated Successfully!');</script>";
-            } 
-            else {
+                echo "<script>window.location.href='user_editprofile.php';</script>";
+
+            }
+            else{
                 echo "<script>alert('Failed to update!');</script>";
             }
         }
@@ -73,7 +73,7 @@
         <div class="sub-menu">
             <div class="user-info">
                 <img src="<?php echo $user_data['user_profile']; ?>" class="user-pic">
-                <?php echo $user_data['first_name']; ?>
+                <?php echo $user_data['username']; ?>
             </div>
             <hr>
 
@@ -158,11 +158,11 @@
                 
                 <div class="profile-info">
                     <div class="info-box">
-                        <input type="text" name="username" class="name-input" value="<?php echo $user_data['first_name']; ?>">
+                        <input type="text" name="username" id="username" class="name-input" value="<?php echo $user_data['username']; ?>">
                         <span class="label" id="username-label" >Username</span>
                     </div>
                     <div class="info-box">
-                        <input type="email" name="email" class="email-input" value="<?php echo $user_data['user_email']; ?>">
+                        <input type="email" name="email" class="email-input" id="email" value="<?php echo $user_data['user_email']; ?>">
                         <span class="label" id="email-label">Email</span>
                     </div>
                 </div>
@@ -196,6 +196,26 @@
     <script>
         document.getElementById('notif-bell').addEventListener('click', () => {
             window.location.href = "../pages/transaction_history.php";
+        });
+
+
+        let save = document.getElementById('save-button');
+        save.style.display = "none";
+
+        let usernameInput = document.getElementById('username');
+        let emailInput = document.getElementById('email');
+        let image = document.getElementById('profileImage');
+
+        usernameInput.addEventListener('click', () => {
+            save.style.display = "block";
+        });
+
+        emailInput.addEventListener('click', () => {
+            save.style.display = "block";
+        });
+
+        image.addEventListener("click", () => {
+            save.style.display = "block";
         })
     </script>
 </body>

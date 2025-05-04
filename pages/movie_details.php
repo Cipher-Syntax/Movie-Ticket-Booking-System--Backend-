@@ -1,46 +1,33 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
+    require_once("../class/Movies.php");
 
-    $user_data = check_login($conn);
+    $user_data = checkUserLogin($conn);
 
-    // Get movie ID from URL parameter
     if (isset($_GET['id']) && isset($_GET['cinema'])) {
         $movieId = $_GET['id'];
         $cinema_table = $_GET['cinema']; 
 
-        $sql = "SELECT * FROM movies WHERE id = ?";
-        // Fetch movie details
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "i", $movieId);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+        $stmt = $user->getResultsById($movieId);
+        $movie = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Fetch movie schedules from cinema1_movie_schedules - cinema5_movie_scheduls
-        $schedule_table = $cinema_table . "movie_schedules";
+        $cinema_number = (int) filter_var($cinema_table, FILTER_SANITIZE_NUMBER_INT);
+        
+        $stmtSchedules = $user->getMovieSchedules($movieId, $cinema_number);
+        $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
 
-        $schedule_sql = "SELECT show_time, show_date FROM movie_schedules WHERE movie_id = ?";
-        $schedule_stmt = mysqli_prepare($conn, $schedule_sql);
-        mysqli_stmt_bind_param($schedule_stmt, "i", $movieId);
-        mysqli_stmt_execute($schedule_stmt);
-        $schedule_result = mysqli_stmt_get_result($schedule_stmt);
-
-        $schedules = [];
-        while ($row = mysqli_fetch_assoc($schedule_result)) {
-            $schedules[] = $row;
-        }
-
-        if ($result && mysqli_num_rows($result)) {
-            $movie = mysqli_fetch_assoc($result);
-        } else {
-            // Redirect to cinema selection if movie not found
+        if (!$movie) {
             header("Location: cinema_selection_page.php");
             exit();
         }
+    
     } else {
-        // Redirect to cinema selection if no ID provided
         header("Location: cinema_selection_page.php");
         exit();
     }
@@ -81,7 +68,7 @@
         <div class="sub-menu">
             <div class="user-info">
                 <img src="<?php echo $user_data['user_profile']; ?>" class="user-pic">
-                <?php echo $user_data['first_name']; ?>
+                <?php echo $user_data['username']; ?>
             </div>
             <hr>
 
@@ -244,7 +231,3 @@
     </script>
 </body>
 </html>
-
-<?php
-    $conn->close();
-?>

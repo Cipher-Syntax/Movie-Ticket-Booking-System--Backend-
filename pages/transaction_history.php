@@ -1,18 +1,22 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/Movies.php");
 
-    $user_data = check_login($conn);
+    $user_data = checkUserLogin($conn);
     $day = date("m/d/y");
 
-    $query = "SELECT bookings.*, movies.title, movies.cinema_number
+    $stmt = $conn->prepare("SELECT bookings.*, movies.title, movies.cinema_number
             FROM bookings
             LEFT JOIN movies ON bookings.movie_id = movies.id
-            GROUP BY bookings.booking_date DESC";
-
-    $result = mysqli_query($conn, $query);
+            GROUP BY bookings.booking_date DESC");
+    
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -52,7 +56,7 @@
         <div class="sub-menu">
             <div class="user-info">
                 <img src="<?php echo $user_data['user_profile']; ?>" class="user-pic">
-                <?php echo $user_data['first_name']; ?>
+                <?php echo $user_data['username']; ?>
             </div>
             <hr>
 
@@ -115,95 +119,27 @@
             <div class="vertical-scroll">
                 <div class="transaction-container">
                     <div class="transaction-list">
-                
-                        <?php while ($transactions = mysqli_fetch_assoc($result)) { ?>
-                            <div class="date-group">
-                                <div class="date-header"><?php echo date("M d, Y", strtotime($transactions['booking_date'])); ?></div>
-                                <div class="transaction-item">
-                                    <div class="movie-info">
-                                        <div class="movie-time"><?php echo date("H:i", strtotime($transactions['booking_date'])); ?></div>
-                                        
-                                        <div class="movie-seat"><?php echo $transactions['seats'];?></div>
-                                    </div>
-                                    <div class="movie-title"><?php echo $transactions['title'];?></div>
-                                    <div class="ticket-info"><?php echo $transactions['tickets'] . " Tickets";?></div>
-                                    <div class="price"><?php echo "₱" . $transactions['total_price'];?></div>
-                                </div>
-                            </div>
+                        <?php
+                            $previous_date = '';
+                            foreach ($result as $transactions):
+                                $current_date = date("M d, Y", strtotime($transactions['booking_date']));
 
-                        <?php }?>
+                                if ($current_date !== $previous_date): ?>
+                                    <div class="date-group">
+                                    <div class="date-header"><?php echo $current_date; ?></div>
+                                    <?php $previous_date = $current_date ?>
+                                <?php endif ?>
 
-                        <!-- <div class="date-group">
-                            <div class="date-header">Jan 14, 2025</div>
                             <div class="transaction-item">
                                 <div class="movie-info">
-                                    <div class="movie-time">13:00</div>
-                                    <div class="movie-seat">A-2</div>
+                                    <div class="movie-time"><?php echo date("H:i", strtotime($transactions['booking_date'])); ?></div>
+                                    <div class="movie-seat"><?php echo $transactions['seats']; ?></div>
                                 </div>
-                                <div class="movie-title">The Nice Guys</div>
-                                <div class="ticket-info">1 Ticket</div>
-                                <div class="price">₱180.00</div>
+                                <div class="movie-title"><?php echo $transactions['title']; ?></div>
+                                <div class="ticket-info"><?php echo $transactions['tickets'] . " Tickets"; ?></div>
+                                <div class="price"><?php echo "₱" . $transactions['total_price']; ?></div>
                             </div>
-                        </div>
-                        <div class="date-group">
-                            <div class="date-header">Feb 14, 2025</div>
-                            <div class="transaction-item">
-                                <div class="movie-info">
-                                    <div class="movie-time">13:00</div>
-                                    <div class="movie-seat">A-3, B-3</div>
-                                </div>
-                                <div class="movie-title">Moana 2</div>
-                                <div class="ticket-info">2 Tickets</div>
-                                <div class="price">₱360.00</div>
-                            </div>
-                            <div class="transaction-item">
-                                <div class="movie-info">
-                                    <div class="movie-time">18:00</div>
-                                    <div class="movie-seat">A-4, B-4</div>
-                                    </div>
-                                        <div class="movie-title">La La Land</div>
-                                        <div class="ticket-info">2 Tickets</div>
-                                        <div class="price">₱3600.00</div>
-                                    </div>
-                                </div>
-                        </div>
-                        <div class="date-group">
-                            <div class="date-header">Mar 8, 2025</div>
-                            <div class="transaction-item">
-                                <div class="movie-info">
-                                    <div class="movie-time">15:00</div>
-                                    <div class="movie-seat">A-6, B-6, C-2</div>
-                                </div>
-                                <div class="movie-title">Harry Potter And the Goblet of Fire</div>
-                                <div class="ticket-info">3 Tickets</div>
-                                <div class="price">₱900.00</div>
-                            </div>
-                        </div>
-                        <div class="date-group">
-                            <div class="date-header">Mar 30, 2025</div>
-                            <div class="transaction-item">
-                                <div class="movie-info">
-                                    <div class="movie-time">10:00</div>
-                                    <div class="movie-seat">D-1, D-2, D-3</div>
-                                    <div class="movie-seat">D-4, D-5, D-6</div>
-                                </div>
-                                <div class="movie-title">To All The Boys I've Loved Before</div>
-                                <div class="ticket-info">6 Tickets</div>
-                                <div class="price">₱1,080.00</div>
-                            </div>
-                        </div>
-                        <div class="date-group">
-                            <div class="date-header">April 5, 2025</div>
-                            <div class="transaction-item">
-                                <div class="movie-info">
-                                    <div class="movie-time">20:30</div>
-                                    <div class="movie-seat">E-5, E-6</div>
-                                </div>
-                                <div class="movie-title">Kung Fu Panda 4</div>
-                                <div class="ticket-info">2 Tickets</div>
-                                <div class="price">₱360.00</div>
-                            </div>
-                        </div> -->
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>

@@ -1,10 +1,14 @@
 <?php
-    session_start();
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/UserRegistration.php");
+    require_once("../class/Movies.php");
 
-    $user_data = check_login($conn);
+    $user_data = checkUserLogin($conn);
 
     $movieId = $_SESSION['movie_id'];
     $cinemaTable = $_SESSION['cinema_table'];
@@ -15,25 +19,16 @@
     $booking_date = date("m/d/y");
     $price = isset($_POST['price']) ? $_POST['price'] : '0';
   
-    // Fetch movie details
-    $sql = "SELECT * FROM movies WHERE id = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $movieId);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $movie = mysqli_fetch_assoc($result);
+
+    $stmt = $user->getResultsById($movieId);
+    $movie = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $seatArray = array_filter(array_map('trim', explode(',', $selectedSeats)));
     $tickets = count($seatArray);
     $price_per_ticket = 150;
     $total_price = $tickets * $price_per_ticket;
 
-    // Insert booking record into the bookings table
-    $insert_sql = "INSERT INTO bookings (user_id, movie_id, cinema_table, seats, price_per_ticket, tickets, total_price) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = mysqli_prepare($conn, $insert_sql);
-    mysqli_stmt_bind_param($stmt, "iissidi", $user_data['id'], $movieId,  $cinemaTable, $selectedSeats, $price_per_ticket, $tickets, $total_price);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    $insert_sql = $user->createBookings($user_data['id'], $movieId, $cinemaTable, $selectedSeats, $price_per_ticket, $tickets, $total_price);
 
     // Generating QR code
     $qrData = json_encode([
@@ -81,7 +76,7 @@
         <div class="sub-menu">
             <div class="user-info">
                 <img src="<?php echo $user_data['user_profile']; ?>" class="user-pic">
-                <?php echo $user_data['first_name']; ?>
+                <?php echo $user_data['username']; ?>
             </div>
             <hr>
 

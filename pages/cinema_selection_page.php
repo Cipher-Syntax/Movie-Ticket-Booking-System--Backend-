@@ -1,72 +1,11 @@
 <?php
     session_start();
     
-    include("../includes/connection.php");
-    include("../includes/allFunction.php");
+    require_once("../class/Connection.php");
+    require_once("../includes/login_checker.php");
+    require_once("../class/Movies.php");
 
-    $user_data = check_login($conn);
-
-    $query = "SELECT * FROM cinemas";
-    $result = mysqli_query($conn, $query);
-
-    // $cinemas = [
-    //     "cinema1" => ["name" => "Cinema 1", 
-    //     "location" => "3rd Floor Room 1", 
-    //     "image" => "cinema_1.png", 
-    //     "movies" => [
-    //         "..\assets\images\movie_posters\G_PrideAndPrejudice.png",
-    //         "..\assets\images\movie_posters\PG_500DaysOfSummer.png",
-    //         "..\assets\images\movie_posters\PG_AboutTime.png",
-    //         "..\assets\images\movie_posters\PG_AlwaysBeMyMaybe.png",
-    //         "..\assets\images\movie_posters\PG_AnyoneButYou.png",
-    //         "..\assets\images\movie_posters\PG_AQuietPlace.png"
-    //     ]],
-    //     "cinema2" => ["name" => "Cinema 2", 
-    //     "location" => "3rd Floor Room 2", 
-    //     "image" => "cinema_2.png",
-    //     "movies" => [
-    //         "..\assets\images\movie_posters\PG_HarryPotterAndTheGobletOfFire.png",
-    //         "..\assets\images\movie_posters\PG_HarryPotterAndTheHalfBloofPrince.png",
-    //         "..\assets\images\movie_posters\PG_MatrixReloaded.png",
-    //         "..\assets\images\movie_posters\PG_Interstellar.png",
-    //         "..\assets\images\movie_posters\PG_Inception.png",
-    //         "..\assets\images\movie_posters\PG_LaLaLand.png"
-    //     ]],
-    //     "cinema3" => ["name" => "Cinema 3", 
-    //     "location" => "3rd Floor Room 3", 
-    //     "image" => "cinema_3.jpg",
-    //     "movies" => [
-    //         "..\assets\images\movie_posters\PG_TheHobbit.png",
-    //         "..\assets\images\movie_posters\PG_TheFaultInOurStars.png",
-    //         "..\assets\images\movie_posters\PG_TheMartian.png",
-    //         "..\assets\images\movie_posters\PG_TheNotebook.png",
-    //         "..\assets\images\movie_posters\PG_TheOtherGuys.png",
-    //         "..\assets\images\movie_posters\PG_TheGrandBudapest.png"
-    //     ]],
-    //     "cinema4" => ["name" => "Cinema 4", 
-    //     "location" => "3rd Floor Room 4", 
-    //     "image" => "cinema_4.jpg",
-    //     "movies" => [
-    //         "..\assets\images\movie_posters\PG_TheHobbit.png",
-    //         "..\assets\images\movie_posters\PG_TheFaultInOurStars.png",
-    //         "..\assets\images\movie_posters\PG_TheMartian.png",
-    //         "..\assets\images\movie_posters\PG_TheNotebook.png",
-    //         "..\assets\images\movie_posters\PG_TheOtherGuys.png",
-    //         "..\assets\images\movie_posters\PG_TheGrandBudapest.png"
-    //     ]],
-    //     "cinema5" => ["name" => "Cinema 5", 
-    //     "location" => "3rd Floor Room 5", 
-    //     "image" => "cinema_5.jpg",
-    //     "movies" => [
-    //         "..\assets\images\movie_posters\R_Nope.png",
-    //         "..\assets\images\movie_posters\R_PansLabyrinth.png",
-    //         "..\assets\images\movie_posters\R_ParanormalActivity.png",
-    //         "..\assets\images\movie_posters\R_Scream.png",
-    //         "..\assets\images\movie_posters\R_StepBrothers.png",
-    //         "..\assets\images\movie_posters\R_SuperBad.png"
-    //     ]]
-    // ];
-
+    $user_data = checkUserLogin($conn);
     $moviePosters = [
         "cinema1" => [
             "../assets/images/movie_posters/G_PrideAndPrejudice.png",
@@ -93,12 +32,12 @@
             "../assets/images/movie_posters/PG_TheGrandBudapest.png"
         ],
         "cinema4" => [
-            "../assets/images/movie_posters/PG_TheHobbit.png",
-            "../assets/images/movie_posters/PG_TheFaultInOurStars.png",
-            "../assets/images/movie_posters/PG_TheMartian.png",
-            "../assets/images/movie_posters/PG_TheNotebook.png",
-            "../assets/images/movie_posters/PG_TheOtherGuys.png",
-            "../assets/images/movie_posters/PG_TheGrandBudapest.png"
+            "../assets/images/movie_posters/R_BladeRunner.png",
+            "../assets/images/movie_posters/R_Blockers.png",
+            "../assets/images/movie_posters/R_Borat.png",
+            "../assets/images/movie_posters/R_BoratSubsequentMovieFilm.png",
+            "../assets/images/movie_posters/R_Bridesmaids.png",
+            "../assets/images/movie_posters/R_CallMeByYourName.png"
         ],
         "cinema5" => [
             "../assets/images/movie_posters/R_Nope.png",
@@ -111,8 +50,9 @@
     ];
     
     $cinemas = [];
+    $result = $user->getAllResults();
     
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $slug = strtolower(str_replace(' ', '', $row['cinema_name']));
     
         $cinemas[] = [
@@ -161,7 +101,7 @@
         <div class="sub-menu">
             <div class="user-info">
                 <img src="<?php echo $user_data['user_profile']; ?>" class="user-pic">
-                <?php echo $user_data['first_name'] ?>
+                <?php echo $user_data['username'] ?>
             </div>
             <hr>
 
