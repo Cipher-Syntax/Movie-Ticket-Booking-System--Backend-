@@ -89,6 +89,10 @@
 
     <div class="main-container">
         <nav class="sidebar-navigation">
+            <div class="dashboard-field">
+                <i class='bx bx-home-alt'></i>
+                <a href="../pages/cinema_selection_page.php"><h5>Home</h5></a>
+            </div>
             <!-- Dashboard -->
             <div class="dashboard-field">
                 <i class='bx bx-user'></i>
@@ -102,7 +106,7 @@
             <!-- Bookings -->
             <div class="bookings-field">
                 <i class='bx bx-history' ></i>
-                <a href="#"><h5>History</h5></a>
+                <a href="../pages/transaction_history.php"><h5>History</h5></a>
             </div>
             <!-- Cinema -->
             <div class="cinema-field">
@@ -166,7 +170,7 @@
     <script src="../assets/js/transaction_history.js"></script>
     <script>
         document.getElementById('notif-bell').addEventListener('click', () => {
-            window.location.href = "/pages/transaction_history.php";
+            window.location.href = "../pages/transaction_history.php";
         })
     </script>
 </body>

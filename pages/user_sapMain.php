@@ -96,6 +96,10 @@
 
     <div class="settings-privacy-container">
         <nav class="sidebar-navigation">
+            <div class="dashboard-field">
+                <i class='bx bx-home-alt'></i>
+                <a href="../pages/cinema_selection_page.php"><h5>Home</h5></a>
+            </div>
             <!-- Dashboard -->
             <div class="dashboard-field">
                 <i class='bx bx-user'></i>
