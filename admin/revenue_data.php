@@ -3,7 +3,7 @@
     require_once("../includes/login_checker.php");
     require_once("../class/UserRegistration.php");
 
-    $stmt = $conn->prepare("SELECT DATE(booking_date) AS booking_day, SUM(total_price) AS total_revenue FROM bookings GROUP BY booking_day ORDER BY booking_day ASC");
+    $stmt = $conn->prepare("SELECT DATE(booking_date) AS booking_day, SUM(total_price) AS total_revenue FROM bookings GROUP BY booking_day ORDER BY booking_day ASC WHERE DATE(booking_date) = CURDATE()");
     $stmt->execute();
 
     $data = [];

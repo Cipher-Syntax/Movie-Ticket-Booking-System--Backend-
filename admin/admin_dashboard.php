@@ -9,12 +9,12 @@
 
     $admin_data = checkAdminLogin($conn);
 
-    $query = $conn->prepare("SELECT * FROM bookings ORDER BY booking_date DESC LIMIT 4");
+    $query = $conn->prepare("SELECT * FROM bookings WHERE DATE(booking_date) = CURDATE() ORDER BY booking_date DESC LIMIT 4");
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
     // TOTAL QUERY
-    $total_query = $conn->prepare("SELECT COUNT(id) AS total_bookings FROM bookings");
+    $total_query = $conn->prepare("SELECT COUNT(id) AS total_bookings FROM bookings WHERE DATE(booking_date) = CURDATE()");
     $total_query->execute();
     $total_result = $total_query->fetch(PDO::FETCH_ASSOC);
     $total_bookings = $total_result['total_bookings'];
@@ -26,7 +26,7 @@
     $revenue_today = $revenue_result['revenue_today'] ?? 0;
 
     // ACTIVE USERS
-    $active_query = $conn->prepare("SELECT COUNT(DISTINCT user_id) AS active_users FROM bookings");
+    $active_query = $conn->prepare("SELECT COUNT(DISTINCT user_id) AS active_users FROM bookings WHERE DATE(booking_date) = CURDATE()");
     $active_query->execute();
     $active_result = $active_query->fetch(PDO::FETCH_ASSOC);
     $active_users = $active_result['active_users'];
@@ -116,7 +116,7 @@
         <div class="dashboard-metrics">
                 <div class="container">
                     <div class="total-bookings">
-                        <p>Total Bookings</p>
+                        <p>Today's Total Bookings</p>
                     </div>
 
                     <div class="values">
@@ -141,7 +141,7 @@
 
                 <div class="container">
                     <div class="active-users">
-                        <p>Active Users</p>
+                        <p>Today's Active Users</p>
                     </div>
                     <div class="values">
                         <p><?php echo $active_users; ?></p>
@@ -197,7 +197,7 @@
                 </thead>
                 <tbody>
                     <?php
-                        $bookings = $admin->getAllBookings();
+                        $bookings = $result;
 
                         if (!empty($bookings)) {
                             foreach ($bookings as $booking) {
@@ -214,7 +214,7 @@
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='9' style='text-align:center;'>No bookings found</td></tr>";
+                            echo "<tr><td colspan='9' style='text-align:center;'>No bookings found today</td></tr>";
                         }
                     ?>
                 </tbody>
@@ -296,8 +296,7 @@
                 })
                 .catch(err => console.error("Error loading chart data:", err));
         });
-        </script>
-
+    </script>
 
 </body>
 </html>
