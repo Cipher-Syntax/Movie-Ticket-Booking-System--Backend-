@@ -8,6 +8,7 @@
     require_once("../class/UserRegistration.php");
 
     $user_data = checkUserLogin($conn);
+    $_SESSION['id'] = $user_data['id'];
 
     $allowedCinemas = ['cinema1', 'cinema2', 'cinema3', 'cinema4', 'cinema5'];
     if (isset($_GET['cinema']) && in_array($_GET['cinema'], $allowedCinemas)) {
@@ -154,7 +155,8 @@
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
-                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" />
+                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" onerror="this.onerror=null; this.src='../assets/images/movie_posters/default-movie-poster.jpg';" />
+
                                 </div>
                                 <h3 class="movie-title"><?php echo hideExceedingTitle($movie['title']); ?></h3>
                                 <a href="movie_details.php?id=<?php echo $movie['id']; ?>&cinema=<?php echo $cinemaTable; ?>">
@@ -185,7 +187,7 @@
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
-                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" />
+                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" onerror="this.onerror=null; this.src='../assets/images/movie_posters/default-movie-poster.jpg';" />
                                 </div>
                                 <h3 class="movie-title"><?php echo hideExceedingTitle($movie['title']); ?></h3>
                                 <a href="movie_details.php?id=<?php echo $movie['id']; ?>&cinema=<?php echo $cinemaTable; ?>">
@@ -215,7 +217,7 @@
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
-                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" />
+                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" onerror="this.onerror=null; this.src='../assets/images/movie_posters/default-movie-poster.jpg';" />
                                 </div>
                                 <h3 class="movie-title"><?php echo hideExceedingTitle($movie['title']); ?></h3>
                                 <a href="movie_details.php?id=<?php echo $movie['id']; ?>&cinema=<?php echo $cinemaTable; ?>">

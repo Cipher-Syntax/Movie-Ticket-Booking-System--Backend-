@@ -103,7 +103,7 @@
         <div class="left-side">
             <div class="img-box">
                 <center>
-                    <img src="<?php echo $movie['image']; ?>" alt="<?php echo $movie['title']; ?>" />
+                    <img src="<?php echo $movie['image']; ?>" alt="<?php echo $movie['title']; ?> " onerror="this.onerror=null; this.src='../assets/images/movie_posters/default-movie-poster.jpg';" />
                 </center>
             </div>
 

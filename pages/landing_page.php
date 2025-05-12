@@ -3,10 +3,38 @@
         session_start();
     }
 
+    require_once("../class/Database.php");
     require_once("../class/Connection.php");
     require_once("../includes/login_checker.php");
     require_once("../class/UserRegistration.php");
-    
+
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+        if(isset($_POST['send'])){
+            $name = htmlspecialchars($_POST['name']);
+            $email = trim(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL));
+            $message = $_POST['message'];
+
+            if(!empty($name) || !empty($email) || !empty($message)){
+                $query = "INSERT INTO inquiries (name, email, message) VALUES (:name, :email, :message)";
+                $stmt = $conn->prepare($query);
+                $bindParams = [":name" => $name, ":email" => $email, ":message" => $message];
+                
+                if($stmt->execute($bindParams)){
+                    echo "<script>alert('Message successfully sent');</script>";
+                    echo "<script>window.location.href = 'landing_page.php';</script>";
+                }
+                else{
+                    echo "<script>alert('Failed to send message');</script>";
+                }
+            }
+            else{
+                echo "<script>alert('Please fill in all fields');</script>";
+            }
+        }
+        else {
+            echo "<script>alert('Invalid submission');</script>";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -25,14 +53,14 @@
             <h1 class="logo">NoirÉclipse</h1>
             <a href="../pages/signup.php" class="btn signup-btn">Sign In</a>
             <a href="#contact" class="contact">Contact Us</a>
-            <a href="#about" class="about">About Us</a>
+            <a href="../pages/about.php" class="about">About Us</a>
         </div>
         <hr>
         
         <div class="header-content">
             <h1>NoirÉclipse</h1>
             <p>" Immerse In The Magic Of Movies: NoirÉclipse Where Every Ticket Tells A Story "</p>
-            <a href="#about" class="btn learn-more-btn"> Learn More...</a>
+            <a href="../pages/about.php" class="btn learn-more-btn"> Learn More...</a>
         </div>
     </header>
     
@@ -112,17 +140,17 @@
                 </div>
             </div>
             <div class="contact-form">
-                <form>
+                <form action="" method="POST">
                     <div class="form-group">
-                        <input type="text" class="forms" placeholder="Your Name" required>
+                        <input type="text" name="name" class="forms" placeholder="Your Name" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="forms" placeholder="Your Email" required>
+                        <input type="email" name="email" class="forms" placeholder="Your Email" required>
                     </div>
                     <div class="form-group">
-                        <textarea class="forms" rows="5" placeholder="Your Message" required></textarea>
+                        <textarea class="forms" name="message" rows="5" placeholder="Your Message" required></textarea>
                     </div>
-                    <button type="submit" class="btn">Send Message</button>
+                    <button type="submit" name="send" class="btn">Send Message</button>
                 </form>
             </div>
         </div>

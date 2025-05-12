@@ -52,6 +52,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" />
 
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 
 <body>
@@ -76,6 +78,12 @@
                 <?php echo $user_data['username']; ?>
             </div>
             <hr>
+
+            <a href="../pages/cinema_selection_page.php" class="sub-menu-links home" id="home">
+                <i class="fa fa-home"></i>
+                <p>Home</p>
+                <!-- <span> > </span> -->
+            </a>
 
             <a href="#" class="sub-menu-links edit-profile">
                 <i class='bx bx-user'></i>

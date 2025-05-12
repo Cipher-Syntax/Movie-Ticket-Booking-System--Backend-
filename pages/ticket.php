@@ -58,6 +58,9 @@
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <header>
@@ -110,7 +113,7 @@
     <div class="ticket">
         <div class="ticket-container">
             <div class="ticket-image">
-                <img src="<?php echo $movie['image']; ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" />
+                <img src="<?php echo $movie['image']; ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" onerror="this.onerror=null; this.src='../assets/images/movie_posters/default-movie-poster.jpg';" />
                 <div class="ticket-header">
                     <h1 class="ticket-title" id="ticket-title"><?php echo htmlspecialchars($movie['title']); ?></h1>
                 </div>
@@ -157,7 +160,7 @@
         </div>
     </div>
 
-    <input type="button" name="button" id="ticket-btn" value="Download Ticket" class="js-download-btn"/>
+    <input type="button" onclick="downloadTicket()"  name="button" id="ticket-btn" value="Download Ticket" class="js-download-btn"/>
 
     <footer>
         <div class="footer-logo">
@@ -225,7 +228,32 @@
             
         });
 
-
     </script>
+
+    <script>
+        function downloadTicket() {
+            const ticket = document.querySelector('.ticket-container');
+
+            html2canvas(ticket, { backgroundColor: null }).then(function(canvas) {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+
+                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                pdf.save('ticket.pdf');
+
+                const ticketHTML = ticket.innerHTML;
+                let savedTickets = JSON.parse(localStorage.getItem('savedTickets')) || [];
+                savedTickets.push(ticketHTML);
+                localStorage.setItem('savedTickets', JSON.stringify(savedTickets));
+
+            });
+        }
+    </script>
+
 </body>
 </html>

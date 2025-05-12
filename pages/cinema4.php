@@ -154,7 +154,7 @@
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
-                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" />
+                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" onerror="this.onerror=null; this.src='../assets/images/movie_posters/default-movie-poster.jpg';" />
                                 </div>
                                 <h3 class="movie-title"><?php echo hideExceedingTitle($movie['title']); ?></h3>
                                 <a href="movie_details.php?id=<?php echo $movie['id']; ?>&cinema=<?php echo $cinemaTable; ?>">
@@ -185,7 +185,7 @@
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
-                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" />
+                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" onerror="this.onerror=null; this.src='../assets/images/movie_posters/default-movie-poster.jpg';" />
                                 </div>
                                 <h3 class="movie-title"><?php echo hideExceedingTitle($movie['title']); ?></h3>
                                 <a href="movie_details.php?id=<?php echo $movie['id']; ?>&cinema=<?php echo $cinemaTable; ?>">
@@ -215,7 +215,7 @@
                         <div class="movies">
                             <div class="background-container">
                                 <div class="image-container">
-                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" />
+                                    <img src="<?php echo $movie['image']; ?>" width="200px" height="250px" onerror="this.onerror=null; this.src='../assets/images/movie_posters/default-movie-poster.jpg';" />
                                 </div>
                                 <h3 class="movie-title"><?php echo hideExceedingTitle($movie['title']); ?></h3>
                                 <a href="movie_details.php?id=<?php echo $movie['id']; ?>&cinema=<?php echo $cinemaTable; ?>">
