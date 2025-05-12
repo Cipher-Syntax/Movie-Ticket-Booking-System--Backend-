@@ -4,6 +4,7 @@ html{
     max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
+    scroll-behavior: smooth;
 }
 *{
     width: 100%;
@@ -19,6 +20,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    overflow-x: hidden;
 }
 header{
     font-family: Poppins;
@@ -398,7 +400,7 @@ footer{
     .right-seat{
         gap: 15px;
         max-width: fit-content;
-        margin-left: 57px;
+        margin-left: 80px;
         padding: 20px;
     }
     .seat{

@@ -363,13 +363,13 @@ footer{
 }
 @media screen and (max-width: 720px){
     .sidebar-navigation{
-        height: 250px;
+        position: absolute;
+        height: 330px;
         width: 100%;
-        background-color: #d1c1e3;
+        background-color: #4a3470;
     }
     .sidebar-navigation h5{
-        text-align: center;
-        color: #fff;
+        text-align: left;
     }
     .dashboard-field,
     .movies-field,
@@ -384,9 +384,10 @@ footer{
     .bookings-field i,
     .cinema-field i,
     .settings-field i{
-        left: 180px;
+        left: 80px;
     }
     .content-wrapper{
+        margin-top: 430px;
         margin-left: 50px;
     }
     .main-content{

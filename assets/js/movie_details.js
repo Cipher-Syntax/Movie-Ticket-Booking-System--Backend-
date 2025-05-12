@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("bookTicket-btn").addEventListener("click", function (e) {
         if (!selectedDate || !selectedTime) {
             e.preventDefault();
-            alert("Human....select a date and time before proceeding....");
+            alert("Please select a date and time before proceeding....");
         }
     });
 });

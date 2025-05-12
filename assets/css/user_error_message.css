@@ -25,3 +25,11 @@ body{
     text-align: center;
     font-size: 12px;
 }
+
+@media screen and (max-width: 720px) {
+    .error-message{
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+    }
+}

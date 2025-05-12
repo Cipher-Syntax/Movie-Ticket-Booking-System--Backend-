@@ -15,6 +15,7 @@ body{
     margin: 0;
     background-color: #271979;
     color: white;
+    overflow-x: hidden;
 }
 .container{
     border-radius: 30px;

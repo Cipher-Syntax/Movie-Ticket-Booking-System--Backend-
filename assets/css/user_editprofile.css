@@ -378,12 +378,14 @@ footer{
 }
 @media screen and (max-width: 720px){
     .sidebar-navigation{
-        height: 250px;
+        position: absolute;
+        height: 330px;
         width: 100%;
-        background-color: #d1c1e3;
+        background-color: #4a3470;
+        display: none;
     }
     .sidebar-navigation h5{
-        text-align: center;
+        text-align: left;
     }
     .dashboard-field,
     .movies-field,
@@ -398,12 +400,11 @@ footer{
     .bookings-field i,
     .cinema-field i,
     .settings-field i{
-        left: 180px;
+        left: 80px;
     }
     .profile-container{
-        left: 255px;
+        left: 245px;
         width: 450px;
-        top: 100%;
     }
     footer{
         position: absolute;

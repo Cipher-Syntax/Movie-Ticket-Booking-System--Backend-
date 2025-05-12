@@ -4,6 +4,7 @@ html{
     max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
+    scroll-behavior: smooth;
 }
 *{
     width: 100%;
@@ -14,6 +15,7 @@ body{
     background-color: #190F53;
     color: #fff;
     margin: 0;
+    overflow-x: hidden;
 }
 header{
     font-family: Poppins;
@@ -436,10 +438,10 @@ footer{
     }
     #bookTicket-btn{
         width: 300px;
-        top: 30vh;
+        top: 300px;
     }
     .right-side{
-        top: 500px;
+        top: 700px;
         right: 12px;
     }
     .right-container{
@@ -458,7 +460,7 @@ footer{
     }
     footer{
         position: relative;
-        top: 500px;
+        top: 800px;
     }
     .footer-logo{
         margin-left: -30px;

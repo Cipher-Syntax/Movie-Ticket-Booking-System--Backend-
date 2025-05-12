@@ -26,6 +26,7 @@ body{
     color: #fff;
     font-size: 1.1rem;
     line-height: 1.6rem;
+    overflow-x: hidden;
 }
 
 h1, h2, h3, h4{
