@@ -22,7 +22,7 @@
         echo "<script>alert('Email already exists.');</script>";
     } 
     else {
-        $query = "CALL addAdminAccount(:email, :hashed_password)";
+        $query = "INSERT INTO admin(admin_email, admin_password) VALUES(:email, :hashed_password)";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':hashed_password', $hashed_password);
