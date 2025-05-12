@@ -9,24 +9,24 @@
 
     $admin_data = checkAdminLogin($conn);
 
-    $query = $conn->prepare("SELECT * FROM bookings WHERE DATE(booking_date) = CURDATE() ORDER BY booking_date DESC LIMIT 4");
+    $query = $conn->prepare("SELECT * FROM bookings ORDER BY booking_date DESC LIMIT 4");
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
     // TOTAL QUERY
-    $total_query = $conn->prepare("SELECT COUNT(id) AS total_bookings FROM bookings WHERE DATE(booking_date) = CURDATE()");
+    $total_query = $conn->prepare("SELECT COUNT(id) AS total_bookings FROM bookings");
     $total_query->execute();
     $total_result = $total_query->fetch(PDO::FETCH_ASSOC);
     $total_bookings = $total_result['total_bookings'];
 
     // REVENUE TODAY
-    $revenue_query = $conn->prepare("SELECT SUM(total_price) as revenue_today FROM bookings WHERE DATE(booking_date) = CURDATE()");
+    $revenue_query = $conn->prepare("SELECT SUM(total_price) as revenue_today FROM bookings");
     $revenue_query->execute();
     $revenue_result = $revenue_query->fetch(PDO::FETCH_ASSOC);
     $revenue_today = $revenue_result['revenue_today'] ?? 0;
 
     // ACTIVE USERS
-    $active_query = $conn->prepare("SELECT COUNT(DISTINCT user_id) AS active_users FROM bookings WHERE DATE(booking_date) = CURDATE()");
+    $active_query = $conn->prepare("SELECT COUNT(DISTINCT user_id) AS active_users FROM bookings");
     $active_query->execute();
     $active_result = $active_query->fetch(PDO::FETCH_ASSOC);
     $active_users = $active_result['active_users'];
@@ -116,7 +116,7 @@
         <div class="dashboard-metrics">
                 <div class="container">
                     <div class="total-bookings">
-                        <p>Today's Total Bookings</p>
+                        <p>Total Bookings</p>
                     </div>
 
                     <div class="values">

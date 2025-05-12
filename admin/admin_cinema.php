@@ -82,7 +82,7 @@
             <!-- Bookings -->
             <div class="bookings-field">
                 <i class='bx bx-notepad'></i>
-                <a href="#">Bookings</a>
+                <a href="../admin/bookings.php">Bookings</a>
             </div>
             <!-- Cinema -->
             <div class="cinema-field">
