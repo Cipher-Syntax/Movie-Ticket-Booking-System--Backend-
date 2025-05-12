@@ -370,8 +370,13 @@ footer{
         left: 80px;
     }
     .container{
-        margin-top: 200px;
-        margin-left: 30px;
+        /* margin-top: 200px;
+        margin-left: 30px; */
+        width: 430px;
+        position: absolute;
+        left: 50%;
+        top: 70%;
+        transform: translate(-50%, -50%);
     }
     .container i{
         position: absolute;

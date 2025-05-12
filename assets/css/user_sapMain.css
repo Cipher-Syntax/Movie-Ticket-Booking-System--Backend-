@@ -468,8 +468,12 @@ footer{
         left: 80px;
     }
     form{
-        top: 100px;
-        left: 15px;
+        /* top: 100px;
+        left: 15px; */
+        width: 440px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, 50%);
     }
     footer{
         position: absolute;

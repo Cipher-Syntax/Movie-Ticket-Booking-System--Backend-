@@ -403,8 +403,14 @@ footer{
         left: 80px;
     }
     .profile-container{
-        left: 245px;
-        width: 450px;
+        /* left: 245px;
+        width: 430px;
+        width: ; */
+        width: 430px;
+        left: 50%;
+        top: 70%;
+        transform: translate(-50%, -50%);
+        overflow-x: hidden;
     }
     footer{
         position: absolute;
