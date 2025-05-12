@@ -58,6 +58,13 @@ CREATE TABLE bookings (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE inquiries(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    message VARCHAR(999) NOT NULL
+);
+
 -- For Cinema 1
 INSERT INTO movie_schedules (movie_id, cinema_number, show_time, show_date) 
 SELECT id, cinema_number, '09:00:00', '2025-05-01' FROM movies WHERE cinema_number = 1;
