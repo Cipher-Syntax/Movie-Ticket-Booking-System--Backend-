@@ -367,6 +367,7 @@ footer{
         height: 330px;
         width: 100%;
         background-color: #4a3470;
+        display: none;
     }
     .sidebar-navigation h5{
         text-align: left;
@@ -387,11 +388,11 @@ footer{
         left: 80px;
     }
     .content-wrapper{
-        margin-top: 430px;
-        margin-left: 50px;
+        margin-top: 450px;
+        margin-left: 45px;
     }
     .main-content{
-        margin-left: 20px;
+        margin-left: 5px;
         width: 450px;
     }
     .transaction-container{
