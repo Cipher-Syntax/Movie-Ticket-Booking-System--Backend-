@@ -90,7 +90,7 @@ header::after{
 .about{
     position: absolute;
     top: 35%;
-    right: 400px;
+    right: 450px;
     max-width: fit-content;
 }
 
@@ -487,7 +487,8 @@ footer {
     }
     .about{
         top: 70%;
-        right: 380px;
+        right: 390px;
+        width: fit-content;
     }
     .signup-btn{
         top: 60%;
